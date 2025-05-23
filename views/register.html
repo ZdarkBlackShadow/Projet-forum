@@ -1,0 +1,28 @@
+{{define "register"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulaire d'inscription</title>
+</head>
+
+<body>
+    <h1>Inscription</h1>
+
+    <form action="/register/submit" method="POST" enctype="multipart/form-data">
+        <label for="email">Email :</label>
+        <input type="email" name="email" required><br><br>
+
+        <label for="password">Mot de passe :</label>
+        <input type="password" name="password" required><br><br>
+
+        <label for="image">Image de profil (optionnelle) :</label>
+        <input type="file" name="image" accept="image/*"><br><br>
+
+        <button type="submit">S'enregistrer</button>
+    </form>
+</body>
+
+</html>
+{{end}}

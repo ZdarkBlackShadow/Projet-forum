@@ -2,10 +2,10 @@ package controllers
 
 import "html/template"
 
-var Templates *template.Template
+var Tmpl *template.Template
 
 func Init() error {
 	var err error
-	Templates, err = template.ParseGlob("views/*.html")
+	Tmpl, err = template.ParseGlob("views/*.html")
 	return err
 }

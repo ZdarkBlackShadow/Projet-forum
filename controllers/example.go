@@ -11,7 +11,7 @@ func Exemple(w http.ResponseWriter, r *http.Request) {
 	var Data models.Exemple = models.Exemple{
 		Text: "Hello world!",
 	}
-	err = Templates.ExecuteTemplate(w, "index", Data)
+	err = Tmpl.ExecuteTemplate(w, "index", Data)
 	if err != nil {
 		log.Fatal(err)
 	}

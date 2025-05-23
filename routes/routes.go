@@ -7,4 +7,7 @@ import (
 
 func InitRoutes() {
 	http.HandleFunc("/", controllers.Exemple)
+	http.HandleFunc("/register", controllers.Register)
+	//post routes
+	http.HandleFunc("/register/submit", controllers.RegisterSubmit)
 }
