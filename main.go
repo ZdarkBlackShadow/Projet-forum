@@ -2,37 +2,60 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"projet-forum/controllers"
 	"projet-forum/database"
-	"projet-forum/routes"
+	"projet-forum/services"
 	"projet-forum/utils"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	var err error
-	
-	err = utils.LoadEnvFile(".env")
-	if err != nil {
-        log.Fatal("Erreur lors du chargement du fichier .env :", err)
-    }
+	utils.LoadEnv()
 
-	if err := database.Init(); err != nil {
-		log.Fatalf("Erreur Init: %v", err)
+	db, dbErr := database.Init()
+
+	if dbErr != nil {
+		log.Fatal(dbErr.Error())
+		return
 	}
-	defer database.Close()
-	utils.DisplayPepper()
-	err = controllers.Init()
-	if err != nil {
-		log.Fatalf("Error when trying to init the controllers : %o", err)
+
+	defer db.Close()
+
+	temp, tempErr := template.ParseGlob("views/*.html")
+
+	fmt.Println("chargement des templates réussie")
+
+	if tempErr != nil {
+		log.Fatalf("Erreur chargement des templates - %s", tempErr.Error())
 	}
-	routes.InitRoutes()
-	fileserver := http.FileServer(http.Dir("./public"))
-	http.Handle("/static/", http.StripPrefix("/static/", fileserver))
+
+	//Initialisation des différents services
+	usersService := services.InitUsersServices(db)
+
+	fmt.Println("Initialisation des services réussi")
+
+	//Initialisation des différents controllers
+	usersController := controllers.InitUsersControllers(usersService, temp)
+
+	fmt.Println("Initialisation des différents controllers réussi")
+
+	//chargement des différents routers
+	router := mux.NewRouter()
+	usersController.UsersRouter(router)
+
+	staticFileDirectory := http.Dir("./public/")
+	staticFileHandler := http.StripPrefix("/static/", http.FileServer(staticFileDirectory))
+	router.PathPrefix("/static/").Handler(staticFileHandler).Methods("GET")
+
+
 	fmt.Println("http://localhost:8000/")
-	err = http.ListenAndServe("localhost:8000", nil)
-	if err != nil {
-		log.Fatal(err)
+
+	serveErr := http.ListenAndServe("localhost:8000", router)
+	if serveErr != nil {
+		log.Fatal(serveErr)
 	}
 }

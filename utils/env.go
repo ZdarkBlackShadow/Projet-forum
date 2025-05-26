@@ -1,33 +1,23 @@
 package utils
 
 import (
-	"bufio"
+	"log"
 	"os"
-	"strings"
+
+	"github.com/joho/godotenv"
 )
 
-func LoadEnvFile(filename string) error {
-	file, err := os.Open(filename)
-	if err != nil {
-		return err
+func LoadEnv() {
+	errLoad := godotenv.Load(".env")
+	if errLoad != nil {
+		log.Fatalf("Erreur chargement fichier d'environemment - Impossible de lancer le programme \n\t Erreur : %s", errLoad.Error())
 	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if line == "" || strings.HasPrefix(line, "#") {
-			continue
-		}
-		parts := strings.SplitN(line, "=", 2)
-		if len(parts) != 2 {
-			continue
-		}
-		key := strings.TrimSpace(parts[0])
-		value := strings.TrimSpace(parts[1])
-		os.Setenv(key, value)
-	}
-
-	return scanner.Err()
 }
 
+func GetEnvWithDefault(key, defaultValue string) string {
+	envVar, envErr := os.LookupEnv(key)
+	if !envErr {
+		return defaultValue
+	}
+	return envVar
+}
