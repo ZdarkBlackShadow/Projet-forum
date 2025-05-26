@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"projet-forum/models"
-	"projet-forum/utils"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -16,10 +15,13 @@ var db *sql.DB
 
 func Init() error {
 	var err error
-	utils.LoadEnvFile(".env")
-	databaseName := os.Getenv("DATABASE_NAME")
-	fmt.Println(databaseName)
-	dsn := "root:@tcp(127.0.0.1:3306)/" + databaseName + "?parseTime=true"
+	user := os.Getenv("DB_USER")
+	pwd := os.Getenv("DB_PWD")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	name := os.Getenv("DB_NAME")
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, pwd, host, port, name)
 	db, err = sql.Open("mysql", dsn)
 	if err != nil {
 		return err
@@ -36,8 +38,8 @@ func Init() error {
 	}
 
 	for _, user := range users {
-		fmt.Printf("User ID: %d, Email: %s, Username: %s, Password: %s, Bio: %s, Last Connection: %s, Image ID: %d\n",
-			user.UserID, user.Email, user.Username, user.Password, user.Bio, user.LastConnection, user.ImageID)
+		fmt.Printf("User ID: %d, Email: %s, Username: %s, Password: %s, Bio: %s, Last Connection: %s, Image ID: %d, Salt : %s\n",
+			user.UserID, user.Email, user.Username, user.Password, user.Bio, user.LastConnection, user.ImageID, user.Salt)
 	}
 	return nil
 }
@@ -50,7 +52,7 @@ func Close() {
 
 func GetAllUser() ([]models.User, error) {
 	rows, err := db.Query(`
-	SELECT user_id, email, username, password, bio, last_conection, image_id
+	SELECT user_id, email, username, password, bio, last_conection, image_id, salt
 	FROM users;
 `)
 	if err != nil {
@@ -62,7 +64,6 @@ func GetAllUser() ([]models.User, error) {
 
 	for rows.Next() {
 		var user models.User
-		var bio sql.NullString
 		var lastConnection time.Time
 
 		err := rows.Scan(
@@ -70,9 +71,10 @@ func GetAllUser() ([]models.User, error) {
 			&user.Email,
 			&user.Username,
 			&user.Password,
-			&bio,
+			&user.Bio,
 			&lastConnection,
 			&user.ImageID,
+			&user.Salt,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("erreur lors du scan : %w", err)

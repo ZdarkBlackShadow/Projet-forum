@@ -12,14 +12,16 @@ import (
 
 func main() {
 	var err error
-	if err := database.Init(); err != nil {
-		log.Fatalf("Erreur Init: %v", err)
-	}
-	defer database.Close() // fermeture propre à la fin du programme
+	
 	err = utils.LoadEnvFile(".env")
 	if err != nil {
         log.Fatal("Erreur lors du chargement du fichier .env :", err)
     }
+
+	if err := database.Init(); err != nil {
+		log.Fatalf("Erreur Init: %v", err)
+	}
+	defer database.Close()
 	utils.DisplayPepper()
 	err = controllers.Init()
 	if err != nil {
