@@ -3,52 +3,91 @@ package services
 import (
 	"database/sql"
 	"fmt"
+	"io"
+	"os"
+	"path/filepath"
 	"projet-forum/models"
 	"projet-forum/repository"
+	"projet-forum/utils"
+	"time"
 )
 
 type UsersServices struct {
-	usersRepo *repository.UsersRepository
+	usersRepo  *repository.UsersRepository
+	imagesRepo *repository.ImageRepository
 }
 
 func InitUsersServices(db *sql.DB) *UsersServices {
-	return &UsersServices{repository.InitUsersRepository(db)}
+	return &UsersServices{
+		usersRepo:  repository.InitUsersRepository(db),
+		imagesRepo: repository.InitImageRepository(db),
+	}
 }
 
-func (s *UsersServices) Create(user models.User) (int, error) {
+func (s *UsersServices) Create(user models.User, image models.UserImage) (int, error) {
 	if user.Username == "" || user.Password == "" {
 		return -1, fmt.Errorf("Erreur ajout user - Données manquantes ou invalides")
 	}
 
-	/* 	if err == nil {
-		defer file.Close()
-
-		err = os.MkdirAll("images/users", os.ModePerm)
+	if (image.File != nil && image.Handler != nil) {
+		err := os.MkdirAll("images/users", os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			return -1, err
 		}
-		imageName = handler.Filename
-		dstPath = filepath.Join("images/users", imageName)
+		imageName := image.Handler.Filename
+		dstPath := filepath.Join("images/users", imageName)
 
-		dst, err := os.Create(dstPath)
-		if err != nil {
-			http.Error(w, "Erreur de création du fichier", http.StatusInternalServerError)
-			return
+		dst, dstErr := os.Create(dstPath)
+		if dstErr != nil {
+			return -1, dstErr
 		}
 		defer dst.Close()
 
-		_, err = io.Copy(dst, file)
-		if err != nil {
-			http.Error(w, "Erreur de copie du fichier", http.StatusInternalServerError)
-			return
+		_, copyErr := io.Copy(dst, image.File)
+		if copyErr != nil {
+			return -1, copyErr
 		}
-	} */
 
-	//à completer
+		imageId, imageErr := s.imagesRepo.Create(dstPath)
+		if imageErr != nil {
+			return -1, imageErr
+		}
+		user.ImageID = imageId
+	} else {
+		user.ImageID = 14
+	}
 
-	userId, userErr := s.usersRepo.CreateUser(user)
+	hashedPassword, salt, passErr := utils.HashPassword(user.Password)
+	if passErr != nil {
+		return -1, passErr
+	}
+
+	user.Password = hashedPassword
+	user.Salt = salt
+
+	user.LastConnection = time.Now()
+
+	userId, userErr := s.usersRepo.Create(user)
 	if userErr != nil {
 		return -1, userErr
 	}
 	return userId, nil
+}
+
+func (s *UsersServices) Connect(nameOrMail string, password string) (models.User, error) {
+	userSalt, saltErr := s.usersRepo.GetSaltByEmailOrUsername(nameOrMail)
+	if saltErr != nil {
+		return models.User{}, saltErr
+	}
+
+	hashedPassword, passErr := utils.HashPasswordWithSalt(password, userSalt)
+	if passErr != nil {
+		return models.User{}, passErr
+	}
+	user, userErr := s.usersRepo.GetUserByEmailOrNameAndPassword(nameOrMail, hashedPassword)
+	if userErr != nil {
+		return models.User{}, userErr
+	}
+
+	return user, nil
 }

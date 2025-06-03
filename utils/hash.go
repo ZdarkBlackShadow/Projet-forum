@@ -20,7 +20,7 @@ func generateSalt(size int) (string, error) {
 	return base64.StdEncoding.EncodeToString(bytes), nil
 }
 
-func hashPassword(password string) (string, string, error) {
+func HashPassword(password string) (string, string, error) {
 	pepper := os.Getenv("PEPPER")
 	if pepper == "" {
 		return "", "", fmt.Errorf("PEPPER non défini")
@@ -38,15 +38,15 @@ func hashPassword(password string) (string, string, error) {
 	return hashBase64, salt, nil
 }
 
-func checkPassword(password, salt, expectedHash string) (bool, error) {
+func HashPasswordWithSalt(password, salt string) (string, error) {
 	pepper := os.Getenv("PEPPER")
 	if pepper == "" {
-		return false, fmt.Errorf("PEPPER non défini")
+		return "", fmt.Errorf("PEPPER non défini")
 	}
 
 	data := password + salt + pepper
 	hash := sha512.Sum512([]byte(data))
 	hashBase64 := base64.StdEncoding.EncodeToString(hash[:])
 
-	return hashBase64 == expectedHash, nil
+	return hashBase64, nil
 }

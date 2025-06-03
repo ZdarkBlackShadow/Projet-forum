@@ -8,7 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func generateJWT(userID string) (string, error) {
+func GenerateJWT(userID string) (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		return "", fmt.Errorf("JWT_SECRET non défini")
@@ -27,7 +27,7 @@ func generateJWT(userID string) (string, error) {
 	return tokenString, nil
 }
 
-func verifyJWT(tokenString string) (string, error) {
+func VerifyJWT(tokenString string) (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		return "", fmt.Errorf("JWT_SECRET non défini")
@@ -41,11 +41,9 @@ func verifyJWT(tokenString string) (string, error) {
 		}
 		return []byte(secret), nil
 	})
-
 	if err != nil || !token.Valid {
 		return "", fmt.Errorf("token invalide : %v", err)
 	}
-
 	// Accès aux claims personnalisés
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		// Vérifie que le token n’est pas expiré

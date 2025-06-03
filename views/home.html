@@ -1,0 +1,24 @@
+{{define "home"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {{if eq .Userconnected true}}
+        <div>
+            <h1>username : {{.ConnectingUser.Username}}</h1>
+            <h2>email : {{.ConnectingUser.Email}}</h2>
+            <h3>bio : {{.ConnectingUser.Bio}}</h3>
+            <h3>last connexion : {{.ConnectingUser.LastConnection}}</h3>
+            <h4>image id : {{.ConnectingUser.ImageID}}</h4>
+        </div>
+    {{else}}
+        <h1>Hello worlds</h1>
+    {{end}}
+    <h2>test</h2>
+</body>
+</html>
+{{end}}

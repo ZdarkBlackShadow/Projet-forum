@@ -54,10 +54,9 @@ type Message struct {
 	Text          string    `json:"text"`
 	CreatedAt     time.Time `json:"created_at"`
 	Edited        bool      `json:"edited"`
-	DownVote      int       `json:"down_vote"`
-	UpVote        int       `json:"up_vote"`
 	Image         bool      `json:"image"`
 	UserID        int       `json:"user_id"`
+	Channel_id    int       `json:"channel_id"`
 }
 
 type Channel struct {

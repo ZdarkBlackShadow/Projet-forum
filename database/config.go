@@ -28,7 +28,5 @@ func Init() (*sql.DB, error) {
 		return nil, err
 	}
 
-	fmt.Println("connexion à la base de donnée réussie")
-
 	return dbContext, nil
 }
