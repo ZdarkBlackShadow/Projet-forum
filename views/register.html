@@ -5,39 +5,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulaire d'inscription</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/register.css">
 </head>
 
 <body>
-    <h1>Inscription</h1>
-
-    <form action="/register/submit" method="POST" enctype="multipart/form-data">
-        <label for="username">Username</label>
-        <input type="text" name="username" required><br><br>
-
-        <label for="bio">Bio</label>
-        <textarea name="bio" placeholder="bio (optionnel)"></textarea>
-
-        <label for="image">Image de profil (optionnelle) :</label>
-        <input type="file" name="image" accept="image/*"><br><br>
-
-        <label for="email">Email :</label>
-        <input type="email" name="email" required><br><br>
-
-        <label for="password">Mot de passe :</label>
-        <input type="password" name="password" required><br><br>
-
-        <button type="submit">S'enregistrer</button>
-    </form>
-    <form action="/connect/submit" method="post">
-        <label for="usernameOrEmail">User or Email</label>
-        <input type="text" name="usernameOrEmail" placeholder="username or email">
-    
-        <label for="password">Password</label>
-        <input type="text" name="password" placeholder="password">
-
-        <button type="submit">Se connecter</button>
-    </form>
+    <div class="register-container">
+        <div class="register-card">
+            <h1>Inscription</h1>
+            <form action="/register/submit" method="POST" enctype="multipart/form-data">
+                <input type="email" name="email" placeholder="Email" required><br><br>
+                <input type="password" name="password" placeholder="Mot de passe" required><br><br>
+                <label for="image" class="file-label">Choisir fichier</label>
+                <input id="image" type="file" name="image" accept="image/*" style="display:none;"><br><br>
+                <button type="submit">S'enregistrer</button>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -1,24 +1,56 @@
 {{define "home"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/static/css/home.css">
+	<title>Accueil</title>
 </head>
 <body>
-    {{if eq .Userconnected true}}
-        <div>
-            <h1>username : {{.ConnectingUser.Username}}</h1>
-            <h2>email : {{.ConnectingUser.Email}}</h2>
-            <h3>bio : {{.ConnectingUser.Bio}}</h3>
-            <h3>last connexion : {{.ConnectingUser.LastConnection}}</h3>
-            <h4>image id : {{.ConnectingUser.ImageID}}</h4>
-        </div>
-    {{else}}
-        <h1>Hello worlds</h1>
-    {{end}}
-    <h2>test</h2>
+	<div class="app-container">
+		<aside class="sidebar-left">
+			<div class="friends-button">
+				<button onclick="location.href='/friends'">
+					<img src="/static/img/Logo.jpg" alt="Friends Logo">
+				</button>
+			</div>
+			<div class="profile-button">
+				<a href="/user">
+					<img src="/static/img/default_image.png" alt="Profil">
+				</a>
+			</div>
+		</aside>
+		<main class="main-content">
+			<header class="main-header">
+				<nav class="categories-nav">
+					<ul>
+						<li data-filter="all">Accueil</li>
+						<li data-filter="gaming">Gaming</li>
+						<li data-filter="musique">Musique</li>
+						<li data-filter="divertissement">Divertissement</li>
+						<li data-filter="sciences-et-technologie">Sciences et Technologie</li>
+						<li data-filter="education">Éducation</li>
+						<li data-filter="pôle-etudiant">Pôle étudiant</li>
+					</ul>
+				</nav>
+				<input type="text" class="search-bar" placeholder="Rechercher...">
+			</header>
+			<section class="discover-section">
+				<h1>Découvrir</h1>
+				<div class="server-list">
+					<div class="server-item" data-category="gaming">Gaming - Serveur Alpha</div>
+					<div class="server-item" data-category="musique">Musique - Serveur Beta</div>
+					<div class="server-item" data-category="divertissement">Divertissement - Serveur Gamma</div>
+					<div class="server-item" data-category="sciences-et-technologie">Sciences et Technologie - Serveur Delta</div>
+					<div class="server-item" data-category="education">Éducation - Serveur Epsilon</div>
+					<div class="server-item" data-category="pôle-etudiant">Pôle étudiant - Serveur Zeta</div>
+					<div class="server-item" data-category="gaming">Gaming - Serveur Theta</div>
+				</div>
+			</section>
+		</main>
+	</div>
+	<script src="/static/js/animation.js"></script>
 </body>
 </html>
 {{end}}
