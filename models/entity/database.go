@@ -1,4 +1,4 @@
-package models
+package entity
 
 import "time"
 
@@ -97,9 +97,9 @@ type UsersWhoCanAccess struct {
 }
 
 type FriendRequest struct {
-	UserID    int       `json:"user_id"`
-	UserID1   int       `json:"user_id_1"`
-	CreatedAt time.Time `json:"created_at"`
+	UserIdCreator int       `json:"user_id_creator"`
+	UserIdInvite  int       `json:"user_id_invite"`
+	CreatedAt     time.Time `json:"created_at"`
 }
 
 type ChannelInvitation struct {

@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"projet-forum/models"
+	"projet-forum/models/dto"
 	"projet-forum/services"
 
 	"github.com/gorilla/mux"
@@ -25,7 +25,7 @@ func (c *HomeControllers) HomeRouter(r *mux.Router) {
 
 func (c *HomeControllers) Home(w http.ResponseWriter, r *http.Request) {
 	var cookieValue string
-	var data models.HomeModel
+	var data dto.HomeModel
 	cookie, err := r.Cookie("token")
 	if err != nil {
 		tempErr := c.template.ExecuteTemplate(w, "home", nil)

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"projet-forum/models"
+	"projet-forum/models/entity"
 	"projet-forum/services"
 	"projet-forum/utils"
 	"strconv"
@@ -43,7 +43,7 @@ func (c *UsersControllers) RegisterSubmit(w http.ResponseWriter, r *http.Request
 	bio := r.FormValue("bio")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-	user := models.User{
+	user := entity.User{
 		Username: username,
 		Bio:      bio,
 		Email:    email,
@@ -51,8 +51,8 @@ func (c *UsersControllers) RegisterSubmit(w http.ResponseWriter, r *http.Request
 	}
 
 	file, handler, err := r.FormFile("image")
-	
-	image := models.UserImage{
+
+	image := entity.UserImage{
 		File:    file,
 		Handler: handler,
 	}

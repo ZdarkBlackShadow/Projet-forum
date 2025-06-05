@@ -3,7 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"projet-forum/models"
+	"projet-forum/models/entity"
 	"time"
 )
 
@@ -15,7 +15,7 @@ func InitUsersRepository(db *sql.DB) *UsersRepository {
 	return &UsersRepository{db}
 }
 
-func (r *UsersRepository)GetAllUsers() ([]models.User, error) {
+func (r *UsersRepository) GetAllUsers() ([]entity.User, error) {
 	rows, err := r.db.Query(`
 	SELECT user_id, email, username, password, bio, last_conection, image_id, salt
 	FROM users;
@@ -25,10 +25,10 @@ func (r *UsersRepository)GetAllUsers() ([]models.User, error) {
 	}
 	defer rows.Close()
 
-	var users []models.User
+	var users []entity.User
 
 	for rows.Next() {
-		var user models.User
+		var user entity.User
 		var lastConnection time.Time
 
 		err := rows.Scan(
@@ -57,7 +57,7 @@ func (r *UsersRepository)GetAllUsers() ([]models.User, error) {
 	return users, nil
 }
 
-func (r *UsersRepository)Create (user models.User) (int, error) {
+func (r *UsersRepository) Create(user entity.User) (int, error) {
 	query := `
 		INSERT INTO users (
 			email, username, password, 
@@ -88,14 +88,14 @@ func (r *UsersRepository)Create (user models.User) (int, error) {
 	return int(insertedID), nil
 }
 
-func (r *UsersRepository)GetById(id string) (models.User, error) {
+func (r *UsersRepository) GetById(id string) (entity.User, error) {
 	query := `
 		SELECT email, username, bio, last_conection, image_id
 		FROM users
 		WHERE user_id = ?;
 	`
 
-	var user models.User
+	var user entity.User
 	var lastConnection time.Time
 
 	err := r.db.QueryRow(query, id).Scan(
@@ -106,7 +106,7 @@ func (r *UsersRepository)GetById(id string) (models.User, error) {
 		&user.ImageID,
 	)
 	if err != nil {
-		return models.User{}, fmt.Errorf("erreur lors de la requête : %w", err)
+		return entity.User{}, fmt.Errorf("erreur lors de la requête : %w", err)
 	}
 
 	user.LastConnection = lastConnection
@@ -131,14 +131,14 @@ func (r *UsersRepository) GetSaltByEmailOrUsername(emailOrUsername string) (stri
 	return salt, nil
 }
 
-func (r *UsersRepository) GetUserByEmailOrNameAndPassword(emailOrUsername, password string) (models.User, error) {
+func (r *UsersRepository) GetUserByEmailOrNameAndPassword(emailOrUsername, password string) (entity.User, error) {
 	query := `
 		SELECT user_id, email, username, password, bio, last_conection, image_id
 		FROM users
 		WHERE (email = ? OR username = ?) AND password = ?;
 	`
 
-	var user models.User
+	var user entity.User
 	var lastConnection time.Time
 
 	err := r.db.QueryRow(query, emailOrUsername, emailOrUsername, password).Scan(
@@ -151,10 +151,118 @@ func (r *UsersRepository) GetUserByEmailOrNameAndPassword(emailOrUsername, passw
 		&user.ImageID,
 	)
 	if err != nil {
-		return models.User{}, fmt.Errorf("erreur lors de la requête : %w", err)
+		return entity.User{}, fmt.Errorf("erreur lors de la requête : %w", err)
 	}
 
 	user.LastConnection = lastConnection
 
 	return user, nil
+}
+
+func (r *UsersRepository) UpdateLastConnection(id string) error {
+	query := `
+		UPDATE users
+		SET last_conection = ?
+		WHERE user_id = ?;
+	`
+
+	_, err := r.db.Exec(query, time.Now(), id)
+	if err != nil {
+		return fmt.Errorf("erreur lors de la mise à jour de la dernière connexion : %w", err)
+	}
+
+	return nil
+}
+
+func (r *UsersRepository) UpdateUser(id string, user entity.User) error {
+	query := `
+		UPDATE users
+		SET email = ?, username = ?, bio = ?, image_id = ?
+		WHERE user_id = ?;
+	`
+
+	_, err := r.db.Exec(query, user.Email, user.Username, user.Bio, user.ImageID, id)
+	if err != nil {
+		return fmt.Errorf("erreur lors de la mise à jour de l'utilisateur : %w", err)
+	}
+
+	return nil
+}
+
+func (r *UsersRepository) UpdatePassword(id string, password string) error {
+	query := `
+		UPDATE users
+		SET password = ?
+		WHERE user_id = ?;
+	`
+
+	_, err := r.db.Exec(query, password, id)
+	if err != nil {
+		return fmt.Errorf("erreur lors de la mise à jour du mot de passe : %w", err)
+	}
+
+	return nil
+}
+
+func (r *UsersRepository) Delete(id string) error {
+	query := `
+		DELETE FROM users
+		WHERE user_id = ?;
+	`
+
+	_, err := r.db.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("erreur lors de la suppression de l'utilisateur : %w", err)
+	}
+
+	return nil
+}
+
+func (r *UsersRepository) GetImageIdByUserId(id string) (string, error) {
+	query := `
+		SELECT image_id
+		FROM users
+		WHERE user_id = ?;
+	`
+
+	var imageId string
+
+	err := r.db.QueryRow(query, id).Scan(&imageId)
+	if err != nil {
+		return "", fmt.Errorf("erreur lors de la requête : %w", err)
+	}
+
+	return imageId, nil
+}
+
+func (r *UsersRepository) UpdateImageIdByUserId(id string, imageId string) error {
+	query := `
+		UPDATE users
+		SET image_id = ?
+		WHERE user_id = ?;
+	`
+
+	_, err := r.db.Exec(query, imageId, id)
+	if err != nil {
+		return fmt.Errorf("erreur lors de la mise à jour de l'image : %w", err)
+	}
+
+	return nil
+}
+
+func (r *UsersRepository) GetIdByUsername(username string) (int, error) {
+	query := `
+		SELECT user_id
+		FROM users
+		WHERE username = ?;
+	`
+
+	var id int
+
+	err := r.db.QueryRow(query, username).Scan(&id)
+	if err != nil {
+		return -1, fmt.Errorf("erreur lors de la requête : %w", err)
+	}
+
+	return id, nil
 }

@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"projet-forum/models"
+	"projet-forum/models/entity"
 	"projet-forum/repository"
 	"projet-forum/utils"
 	"time"
@@ -24,12 +24,12 @@ func InitUsersServices(db *sql.DB) *UsersServices {
 	}
 }
 
-func (s *UsersServices) Create(user models.User, image models.UserImage) (int, error) {
+func (s *UsersServices) Create(user entity.User, image entity.UserImage) (int, error) {
 	if user.Username == "" || user.Password == "" {
 		return -1, fmt.Errorf("Erreur ajout user - Données manquantes ou invalides")
 	}
 
-	if (image.File != nil && image.Handler != nil) {
+	if image.File != nil && image.Handler != nil {
 		err := os.MkdirAll("images/users", os.ModePerm)
 		if err != nil {
 			return -1, err
@@ -74,19 +74,19 @@ func (s *UsersServices) Create(user models.User, image models.UserImage) (int, e
 	return userId, nil
 }
 
-func (s *UsersServices) Connect(nameOrMail string, password string) (models.User, error) {
+func (s *UsersServices) Connect(nameOrMail string, password string) (entity.User, error) {
 	userSalt, saltErr := s.usersRepo.GetSaltByEmailOrUsername(nameOrMail)
 	if saltErr != nil {
-		return models.User{}, saltErr
+		return entity.User{}, saltErr
 	}
 
 	hashedPassword, passErr := utils.HashPasswordWithSalt(password, userSalt)
 	if passErr != nil {
-		return models.User{}, passErr
+		return entity.User{}, passErr
 	}
 	user, userErr := s.usersRepo.GetUserByEmailOrNameAndPassword(nameOrMail, hashedPassword)
 	if userErr != nil {
-		return models.User{}, userErr
+		return entity.User{}, userErr
 	}
 
 	return user, nil

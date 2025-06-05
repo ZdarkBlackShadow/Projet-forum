@@ -2,7 +2,7 @@ package services
 
 import (
 	"database/sql"
-	"projet-forum/models"
+	"projet-forum/models/dto"
 	"projet-forum/repository"
 	"projet-forum/utils"
 )
@@ -17,18 +17,18 @@ func InitHomeServices(db *sql.DB) *HomeServices {
 	}
 }
 
-func (s *HomeServices) GetUser(token string) (models.HomeModel, error) {
+func (s *HomeServices) GetUser(token string) (dto.HomeModel, error) {
 	userId, jwtErr := utils.VerifyJWT(token)
 	if jwtErr != nil {
-		return models.HomeModel{}, jwtErr
+		return dto.HomeModel{}, jwtErr
 	}
 
 	user, userErr := s.usersRepo.GetById(userId)
 	if userErr != nil {
-		return models.HomeModel{}, userErr
+		return dto.HomeModel{}, userErr
 	}
 
-	return models.HomeModel{
+	return dto.HomeModel{
 		Userconnected:  true,
 		ConnectingUser: user,
 	}, nil

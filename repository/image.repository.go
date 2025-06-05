@@ -11,6 +11,9 @@ func InitImageRepository(db *sql.DB) *ImageRepository {
 }
 
 func (r *ImageRepository) Create(path string) (int, error) {
+	/*
+	* test
+	*/
 	query := "INSERT INTO `image` (`path`) VALUES (?);"
 
 	result, resultErr := r.db.Exec(query, path)

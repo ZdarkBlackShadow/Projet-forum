@@ -33,17 +33,26 @@ func main() {
 	usersService := services.InitUsersServices(db)
 	homeService := services.InitHomeServices(db)
 	imageService := services.InitImageServices(db)
+	channelService := services.InitChannelServices(db)
+	messageService := services.InitMessageServices(db)
+	friendService := services.InitFriendServices(db)
 
 	//Initialisation des différents controllers
 	usersController := controllers.InitUsersControllers(usersService, temp)
 	homeController := controllers.InitHomeControllers(homeService, temp)
 	imageController := controllers.InitImageControllers(imageService, temp)
+	channelController := controllers.InitChannelControllers(channelService, temp)
+	messageController := controllers.InitMessageControllers(messageService, temp)
+	friendController := controllers.InitFriendControllers(friendService, temp)
 
 	//chargement des différents routers
 	router := mux.NewRouter()
 	usersController.UsersRouter(router)
 	homeController.HomeRouter(router)
 	imageController.ImageRouter(router)
+	channelController.ChannelRouter(router)
+	messageController.MessageRouter(router)
+	friendController.FriendRouter(router)
 
 	//ajout du ficher public
 	staticFileDirectory := http.Dir("./public/")

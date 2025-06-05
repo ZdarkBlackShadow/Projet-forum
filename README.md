@@ -16,3 +16,15 @@ git clone https://github.com/ZdarkBlackShadow/Projet-forum.git
 ```bash
 go run main.go
 ```
+
+##  Le .env à compléter avec vos données
+
+```bash
+PEPPER =
+DB_NAME =
+DB_PORT =
+DB_USER =
+DB_PWD =
+DB_HOST =
+JWT_SECRET =
+```

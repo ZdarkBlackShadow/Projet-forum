@@ -33,9 +33,7 @@ func VerifyJWT(tokenString string) (string, error) {
 		return "", fmt.Errorf("JWT_SECRET non défini")
 	}
 
-	// Parse et vérifie le token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Vérifie que l’algorithme est bien HS256
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("méthode de signature inattendue : %v", token.Header["alg"])
 		}
@@ -44,19 +42,15 @@ func VerifyJWT(tokenString string) (string, error) {
 	if err != nil || !token.Valid {
 		return "", fmt.Errorf("token invalide : %v", err)
 	}
-	// Accès aux claims personnalisés
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		// Vérifie que le token n’est pas expiré
 		if exp, ok := claims["exp"].(float64); ok {
 			if int64(exp) < time.Now().Unix() {
 				return "", fmt.Errorf("token expiré")
 			}
 		}
-
-		// Exemple : récupérer le userID
 		userID, _ := claims["sub"].(string)
 		return userID, nil
 	}
 
-	return "", fmt.Errorf("claims invalides")
+	return "", fmt.Errorf("invalid claims")
 }
