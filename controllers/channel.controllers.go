@@ -26,6 +26,12 @@ func InitChannelControllers(service *services.ChannelService, template *template
 func (c *ChannelControllers) ChannelRouter(r *mux.Router) {
 	r.HandleFunc("/channel/{id}", c.GetChannelById).Methods("GET")
 	r.HandleFunc("/create/channel", c.Create).Methods("POST")
+	r.HandleFunc("/delete/channel/{id}", c.Delete).Methods("POST")
+	r.HandleFunc("/add/tag/{id}", c.AddTags).Methods("POST")
+	r.HandleFunc("/remove/tag/{id}", c.RemoveTags).Methods("POST")
+	r.HandleFunc("/create/tag/{id}", c.CreateTag).Methods("POST")
+	r.HandleFunc("/create/invitation/{id}", c.CreateChannelInvitation).Methods("POST")
+	r.HandleFunc("/accept/invitation/{id}", c.AcceptChannelInvitation).Methods("POST")
 }
 
 func (c *ChannelControllers) GetChannelById(w http.ResponseWriter, r *http.Request) {
@@ -94,4 +100,151 @@ func (c *ChannelControllers) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/channel/"+ strconv.Itoa(channelId), http.StatusSeeOther)
+}
+
+func (c *ChannelControllers) Delete(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelId := vars["id"]
+
+	cookie, cookieErr := r.Cookie("token")
+	if cookieErr != nil {
+		http.Error(w, "Erreur lors de la récupération du cookie", http.StatusBadRequest)
+		return
+	}
+
+	err := c.service.DeleteChannel(channelId, cookie.Value)
+	if err != nil {
+		http.Error(w, "Erreur lors de la suppression du channel", http.StatusBadRequest)
+		return
+	}
+
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
+}
+
+func (c *ChannelControllers) AddTags(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelId := vars["id"]
+
+	cookie, cookieErr := r.Cookie("token")
+	if cookieErr != nil {
+		http.Error(w, "Erreur lors de la récupération du cookie", http.StatusBadRequest)
+		return
+	}
+
+	tags := r.Form["tag"]
+
+	err := c.service.AddTagToChannel(channelId, tags,  cookie.Value)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'ajout du tag", http.StatusBadRequest)
+		return
+	}
+
+	http.Redirect(w, r, "/channel/"+channelId, http.StatusSeeOther)
+}
+
+func (c *ChannelControllers) RemoveTags(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelId := vars["id"]
+
+	cookie, cookieErr := r.Cookie("token")
+	if cookieErr != nil {
+		http.Error(w, "Erreur lors de la récupération du cookie", http.StatusBadRequest)
+		return
+	}
+
+	tags := r.Form["tag"]
+
+	err := c.service.RemoveTagFromChannel(channelId, tags, cookie.Value)
+	if err != nil {
+		http.Error(w, "Erreur lors de la suppression du tag", http.StatusBadRequest)
+		return
+	}
+
+	http.Redirect(w, r, "/channel/"+channelId, http.StatusSeeOther)
+}
+
+func (c *ChannelControllers) CreateTag(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelId := vars["id"]
+
+	cookie, cookieErr := r.Cookie("token")
+	if cookieErr != nil {
+		http.Error(w, "Erreur lors de la récupération du cookie", http.StatusBadRequest)
+		return
+	}
+
+	tag := r.FormValue("tag")
+
+	err := c.service.CreateTag(channelId, tag, cookie.Value)
+	if err != nil {
+		http.Error(w, "Erreur lors de la création du tag", http.StatusBadRequest)
+		return
+	}
+
+	http.Redirect(w, r, "/channel/"+channelId, http.StatusSeeOther)
+}
+
+func (c *ChannelControllers) CreateChannelInvitation(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelId := vars["id"]
+
+	cookie, cookieErr := r.Cookie("token")
+	if cookieErr != nil {
+		http.Error(w, "Erreur lors de la récupération du cookie", http.StatusBadRequest)
+		return
+	}
+
+	user := r.FormValue("user")
+
+	err := c.service.CreateChannelIvitation(cookie.Value, user, channelId)
+	if err != nil {
+		http.Error(w, "Erreur lors de la création de l'invitation", http.StatusBadRequest)
+		return
+	}
+
+	http.Redirect(w, r, "/channel/"+channelId, http.StatusSeeOther)
+}
+
+func (c *ChannelControllers) AcceptChannelInvitation(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelId := vars["id"]
+
+	cookie, cookieErr := r.Cookie("token")
+	if cookieErr != nil {
+		http.Error(w, "Erreur lors de la récupération du cookie", http.StatusBadRequest)
+		return
+	}
+
+	username := r.FormValue("username")
+	channelName := r.FormValue("channelName")
+
+	err := c.service.AcceptChannelInvitation(cookie.Value, username, channelName)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'acceptation de l'invitation", http.StatusBadRequest)
+		return
+	}
+
+	http.Redirect(w, r, "/channel/"+channelId, http.StatusSeeOther)
+}
+
+func (c *ChannelControllers) DeclineInvitation(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelId := vars["id"]
+
+	cookie, cookieErr := r.Cookie("token")
+	if cookieErr != nil {
+		http.Error(w, "Erreur lors de la récupération du cookie", http.StatusBadRequest)
+		return
+	}
+
+	username := r.FormValue("username")
+	channelName := r.FormValue("channelName")
+
+	err := c.service.DeclineChannelInvitation(cookie.Value, username, channelName)
+	if err != nil {
+		http.Error(w, "Erreur lors du refus de l'invitation", http.StatusBadRequest)
+		return
+	}
+
+	http.Redirect(w, r, "/channel/"+channelId, http.StatusSeeOther)
 }

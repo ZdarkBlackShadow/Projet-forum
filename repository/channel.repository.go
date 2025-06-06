@@ -109,50 +109,80 @@ func (r *ChannelRepository) VerifyAccess(channelId int, userId int) (bool, error
 	return count > 0, nil
 }
 
-func (r *ChannelRepository) GetStateIdByName(name string) int{
-    query := "SELECT state_id FROM state WHERE name = ?"
+func (r *ChannelRepository) GetStateIdByName(name string) int {
+	query := "SELECT state_id FROM state WHERE name = ?"
 
-    var stateId int
-    err := r.db.QueryRow(query, name).Scan(&stateId)
-    if err != nil {
-        return -1
-    }
-    return stateId
-}
-
-func (r *ChannelRepository) CreateTag(tagName string) (int, error) {
-	query := "INSERT INTO tags (name, created_at) VALUES (?, ?)"
-
-	result, resultErr := r.db.Exec(query, tagName, time.Now())
-	if resultErr != nil {
-		return -1, resultErr
-	}
-
-	tagId, tagIdErr := result.LastInsertId()
-	if tagIdErr != nil {
-		return -1, tagIdErr
-	}
-	return int(tagId), nil
-}
-
-func (r *ChannelRepository) GetTagIdByName(tagName string) int {
-	query := "SELECT tag_id FROM tags WHERE name = ?"
-
-	var tagId int
-	err := r.db.QueryRow(query, tagName).Scan(&tagId)
+	var stateId int
+	err := r.db.QueryRow(query, name).Scan(&stateId)
 	if err != nil {
 		return -1
 	}
-	return tagId
+	return stateId
 }
 
-func (r *ChannelRepository) DeleteTag(tagId int) error {
-	query := "DELETE FROM tags WHERE tag_id = ?"
+func (r *ChannelRepository) CreateChannelInvitation(user_id_creator int, user_id_invite int, channelId int) error {
+	query := "INSERT INTO channel_invitation (user_id_creator, user_id_invite, channel_id, created_at) VALUES (?, ?, ?, ?)"
 
-	_, err := r.db.Exec(query, tagId)
+	_, err := r.db.Exec(query, user_id_creator, user_id_invite, channelId, time.Now())
 	if err != nil {
 		return err
 	}
+	return nil
+}
 
+func (r *ChannelRepository) GetAllChannelInvitations(user_id_invite int) ([]entity.ChannelInvitation, error) {
+	query := "SELECT user_id_creator, user_id_invite, channel_id, created_at FROM channel_invitation WHERE user_id_invite = ?;"
+
+	rows, err := r.db.Query(query, user_id_invite)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var invitations []entity.ChannelInvitation
+
+	for rows.Next() {
+		var inv entity.ChannelInvitation
+		err := rows.Scan(&inv.UserID, &inv.UserID1, &inv.ChannelID, &inv.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		invitations = append(invitations, inv)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return invitations, nil
+}
+
+func (r *ChannelRepository) DeleteChannelInvitation(user_id_creator int, user_id_invite int, channelId int) error {
+	query := "DELETE FROM channel_invitation WHERE user_id_creator = ? AND user_id_invite = ? AND channel_id = ?"
+
+	_, err := r.db.Exec(query,user_id_creator, user_id_invite, channelId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *ChannelRepository) GetChannelInvitation(user_id_creator int, user_id_invite int, channelId int) (entity.ChannelInvitation, error) {
+	query := "SELECT user_id_creator, user_id_invite, channel_id, created_at FROM channel_invitation WHERE user_id_creator = ? AND user_id_invite = ? AND channel_id = ?"
+
+	var inv entity.ChannelInvitation
+	err := r.db.QueryRow(query, user_id_creator, user_id_invite, channelId).Scan(&inv.UserID, &inv.UserID1, &inv.ChannelID, &inv.CreatedAt)
+	if err != nil {
+		return entity.ChannelInvitation{}, err
+	}
+	return inv, nil
+}
+
+func (r *ChannelRepository) AddUserToChannel(user_id int, channelId int) error {
+	query := "INSERT INTO users_who_can_acces (user_id, channel_id) VALUES (?, ?)"
+
+	_, err := r.db.Exec(query, user_id, channelId)
+	if err != nil {
+		return err
+	}
 	return nil
 }

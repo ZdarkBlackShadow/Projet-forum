@@ -183,3 +183,4 @@ func (s *MessageServices) UpdateUpDownVote(messageId string, token string, newVo
 
 	return s.messageRepo.UpdateUpDownVote(message.MessageTextID, intUserId, intVote)
 }
+
