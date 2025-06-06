@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/public/css/friendly.css">
-    <title>Friendly</title>
+    <link rel="stylesheet" href="/public/css/friend.css">
+    <title>Friend</title>
 </head>
 <body>
     <div class="app-container">
@@ -20,14 +20,72 @@
                 </a>
             </div>
         </aside>
-    </div>
-    <div class="friends-panel">
-        <div class="friends-search">
-            <input type="text" placeholder="Rechercher des amis...">
+        <div class="friends-panel">
+            <section class="add-section">
+                <div class="center-padding">
+                    <button class="center-button" onclick="toggleAddSearchBar()">Ajouter</button>
+                    <div class="add-search-bar" id="addSearchBarContainer" style="display:none;">
+                        <input type="text" placeholder="Entrez le nom d'utilisateur pour envoyer une demande d'ami...">
+                    </div>
+                </div>
+            </section>
+            <section class="search-section">
+                <div class="friends-controls" id="friendRequestSearchContainer" style="display:none;">
+                    <div class="friends-search">
+                        <input type="text" placeholder="Entrez le nom d'utilisateur pour envoyer une demande d'ami...">
+                    </div>
+                </div>
+                <div class="friend-request-search">
+                    <input type="text" placeholder="Rechercher dans demandes d'ami...">
+                </div>
+                <div class="friend-request">
+                    <button type="button" onclick="toggleMessagePopup()">Demande de message</button>
+                </div>
+                <div class="conversation-list" id="conversationList">
+                    <!-- Sample conversation item with delete button -->
+                    <div class="conversation" id="conversation-1">
+                        <div class="conversation-avatar">X</div>
+                        <div class="conversation-name">Utilisateur X</div>
+                        <button class="delete-conv-btn" onclick="removeConversation('conversation-1')">Supprimer</button>
+                    </div>
+                    <!-- ...other conversation items... -->
+                </div>
+                <div class="message-popup" id="messagePopup" style="display:none;">
+                    <h3>Demandes de message</h3>
+                    <div class="message-item">
+                        <p>Utilisateur X veut vous contacter</p>
+                        <button class="accept-btn" onclick="acceptMessageRequest()">Accepter</button>
+                        <button class="reject-btn" onclick="rejectMessage()">Refuser</button>
+                    </div>
+                </div>
+            </section>
         </div>
-        <div class="friend-request">
-            <button type="button">Demande d'amis</button>
+        <div class="chat-area" id="chatArea" style="display:none;">
+            <div class="chat-header">
+                <div class="chat-avatar" id="chatAvatar">ZD</div>
+                <div class="chat-name" id="chatName">ZdarkBlackShadow</div>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            
+            <div class="chat-input">
+                <textarea placeholder="Écris un message..." id="messageInput"></textarea>
+                <button class="emoji-btn" type="button" onclick="toggleEmojiPanel()">😀</button>
+                <div class="emoji-panel" id="emojiPanel" style="display:none;">
+                    <div id="emojiList"></div>
+                </div>
+                <button id="sendMessage">Envoyer</button>
+            </div>
         </div>
+        <section class="conversation-section">
+            <div class="conversation-toggle" id="conversationToggle" style="display:none;" onclick="toggleConversation()">Ouvrir Conversation</div>
+            <div class="conversation-panel" id="conversationPanel" style="display:none;">
+                <h4>Conversation avec Utilisateur X</h4>
+                <button class="delete-conv-btn" onclick="deleteConversation()">Supprimer conversation</button>
+                <!-- Conversation messages go here -->
+            </div>
+        </section>
     </div>
+    <script src="/public/js/friend.js"></script>
+    <script src="/public/js/messages.js"></script>
 </body>
 </html>
