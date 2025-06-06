@@ -125,3 +125,61 @@ func (s *MessageServices) DeleteMessage(messageId string, token string) error {
 
 	return s.messageRepo.DeleteMessage(intMessageId)
 }
+
+func (s *MessageServices) AddUpDownVote(messageId string, token string, voteType string) error {
+	userId, jwtErr := utils.VerifyJWT(token)
+	if jwtErr != nil {
+		return jwtErr
+	}
+
+	intVote, convErr := strconv.Atoi(voteType)
+	if convErr != nil {
+		return convErr
+	}
+
+	intUserId, convErr := strconv.Atoi(userId)
+	if convErr != nil {
+		return convErr
+	}
+
+	intMessageId, convErr := strconv.Atoi(messageId)
+	if convErr != nil {
+		return convErr
+	}
+
+	message, reqErr := s.GetMessageById(intMessageId)
+	if reqErr != nil {
+		return reqErr
+	}
+
+	return s.messageRepo.AddUpDownVote(message.MessageTextID, intUserId, intVote)
+}
+
+func (s *MessageServices) UpdateUpDownVote(messageId string, token string, newVote string) error {
+	userId, jwtErr := utils.VerifyJWT(token)
+	if jwtErr != nil {
+		return jwtErr
+	}
+
+	intVote, convErr := strconv.Atoi(newVote)
+	if convErr != nil {
+		return convErr
+	}
+
+	intUserId, convErr := strconv.Atoi(userId)
+	if convErr != nil {
+		return convErr
+	}
+
+	intMessageId, convErr := strconv.Atoi(messageId)
+	if convErr != nil {
+		return convErr
+	}
+
+	message, reqErr := s.GetMessageById(intMessageId)
+	if reqErr != nil {
+		return reqErr
+	}
+
+	return s.messageRepo.UpdateUpDownVote(message.MessageTextID, intUserId, intVote)
+}

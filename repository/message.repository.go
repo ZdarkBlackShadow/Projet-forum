@@ -80,3 +80,44 @@ func (r *MessageRepository) DeleteMessage(id int) error {
 	}
 	return nil
 }
+
+func (r *MessageRepository) DeleteMessagesByChannelID(channelID int) error {
+	_, err := r.db.Exec("DELETE FROM `message` WHERE `channel_id` = '?';", channelID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *MessageRepository) DeleteMessagesByUserID(userID int) error {
+	_, err := r.db.Exec("DELETE FROM `message` WHERE `user_id` = '?';", userID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+
+func (r *MessageRepository) AddUpDownVote(messageId int, userId int, voteId int) error {
+	_, err := r.db.Exec("INSERT INTO `up_down`(`user_id`, `message_text_id`, `up_down_vote_id`) VALUES ('?', '?', '?');",
+		userId,
+		messageId,
+		voteId,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *MessageRepository) UpdateUpDownVote(messageId int, userId int, new_vote int) error {
+	_, err := r.db.Exec("UPDATE `up_down` SET `up_down_vote_id` = '?' WHERE `user_id` = '?' AND `message_text_id` = '?';",
+		new_vote,
+		userId,
+		messageId,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}

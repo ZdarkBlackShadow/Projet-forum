@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"projet-forum/models/entity"
+	"time"
 )
 
 type ChannelRepository struct {
@@ -106,4 +107,52 @@ func (r *ChannelRepository) VerifyAccess(channelId int, userId int) (bool, error
 	}
 
 	return count > 0, nil
+}
+
+func (r *ChannelRepository) GetStateIdByName(name string) int{
+    query := "SELECT state_id FROM state WHERE name = ?"
+
+    var stateId int
+    err := r.db.QueryRow(query, name).Scan(&stateId)
+    if err != nil {
+        return -1
+    }
+    return stateId
+}
+
+func (r *ChannelRepository) CreateTag(tagName string) (int, error) {
+	query := "INSERT INTO tags (name, created_at) VALUES (?, ?)"
+
+	result, resultErr := r.db.Exec(query, tagName, time.Now())
+	if resultErr != nil {
+		return -1, resultErr
+	}
+
+	tagId, tagIdErr := result.LastInsertId()
+	if tagIdErr != nil {
+		return -1, tagIdErr
+	}
+	return int(tagId), nil
+}
+
+func (r *ChannelRepository) GetTagIdByName(tagName string) int {
+	query := "SELECT tag_id FROM tags WHERE name = ?"
+
+	var tagId int
+	err := r.db.QueryRow(query, tagName).Scan(&tagId)
+	if err != nil {
+		return -1
+	}
+	return tagId
+}
+
+func (r *ChannelRepository) DeleteTag(tagId int) error {
+	query := "DELETE FROM tags WHERE tag_id = ?"
+
+	_, err := r.db.Exec(query, tagId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
