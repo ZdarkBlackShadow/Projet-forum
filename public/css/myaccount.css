@@ -1,0 +1,305 @@
+body {
+    margin: 0;
+    font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #36393f;
+    color: #dcddde;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.settings-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.settings-sidebar {
+    width: 280px; /* Adjusted width */
+    background-color: #2f3136;
+    padding: 60px 10px 20px 20px; /* Top padding for app bar space */
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #202225;
+}
+
+.sidebar-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: #8e9297;
+    padding: 0 10px 10px 10px;
+    text-transform: uppercase;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li a {
+    display: block;
+    padding: 10px 10px;
+    color: #b9bbbe;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.sidebar-nav li a:hover {
+    background-color: #3a3c43;
+    color: #fff;
+}
+
+.sidebar-nav li.active a {
+    background-color: #40444b;
+    color: #fff;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 10px;
+}
+
+.logout-button {
+    width: 100%;
+    padding: 8px;
+    background-color: transparent;
+    color: #b9bbbe;
+    border: 1px solid #b9bbbe;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.logout-button:hover {
+    border-color: #fff;
+    color: #fff;
+}
+
+
+.settings-content {
+    flex-grow: 1;
+    padding: 60px 40px 40px 40px; /* Top padding for app bar space */
+    overflow-y: auto;
+    background-color: #36393f;
+}
+
+.settings-content h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.profile-card {
+    background-color: #202225; /* Darker background for the card itself */
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.profile-banner {
+    height: 120px;
+    background-color: #7289da; /* Discord purple or user's banner */
+    border-radius: 8px 8px 0 0;
+}
+
+.profile-header {
+    display: flex;
+    align-items: flex-end; /* Align items to bottom of this container */
+    padding: 0 16px;
+    position: relative;
+    margin-bottom: 20px; /* Space before info-box */
+}
+
+.avatar-section {
+    display: flex;
+    align-items: center;
+    margin-top: -48px; /* Pull avatar up onto banner */
+    background-color: #202225; /* Match card background to hide overlap */
+    padding: 4px; /* Small padding around avatar */
+    border-radius: 50%; /* Make the background padding circular */
+    margin-right: 16px;
+}
+
+.profile-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 6px solid #202225; /* Match card background */
+}
+
+.username-tag {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px; /* Align with bottom of avatar visually */
+}
+
+.edit-profile-button {
+    margin-left: auto; /* Pushes button to the right */
+    margin-bottom: 8px; /* Align with username */
+    background-color: #4f545c;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.edit-profile-button:hover {
+    background-color: #5d6269;
+}
+
+.info-box {
+    background-color: #2f3136; /* Slightly lighter than card for contrast */
+    border-radius: 8px;
+    padding: 16px;
+    margin: 0 16px 16px 16px; /* Consistent margin */
+}
+
+.info-item, .info-item-edit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #3a3c43; /* Separator */
+}
+.info-item:last-child, .info-item-edit:last-child {
+    border-bottom: none;
+}
+
+.info-item label, .info-item-edit label {
+    font-size: 12px;
+    color: #b9bbbe;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.info-item span {
+    font-size: 14px;
+    color: #dcddde;
+}
+
+.info-item-edit input[type="text"],
+.info-item-edit input[type="email"] {
+    background-color: #202225;
+    border: 1px solid #202225;
+    border-radius: 3px;
+    color: #dcddde;
+    padding: 10px;
+    font-size: 14px;
+    width: calc(100% - 22px); /* Adjust for padding and border */
+    margin-bottom: 10px;
+}
+.info-item-edit input[type="text"]:focus,
+.info-item-edit input[type="email"]:focus {
+    border-color: #00b0f4;
+    outline: none;
+}
+
+
+.edit-button, .add-button, .action-button, .action-button-secondary,
+.disable-button, .delete-button {
+    background-color: #4f545c;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.edit-button:hover, .add-button:hover, .action-button:hover,
+.action-button-secondary:hover, .disable-button:hover {
+    background-color: #5d6269;
+}
+
+.info-item-edit button {
+    background-color: #7289da;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 8px;
+}
+.info-item-edit button:hover {
+    background-color: #677bc4;
+}
+.info-item-edit button:last-of-type { /* Cancel button style */
+    background-color: #4f545c;
+}
+.info-item-edit button:last-of-type:hover {
+    background-color: #5d6269;
+}
+
+
+.password-auth, .account-removal {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #3a3c43;
+}
+
+.password-auth h2, .account-removal h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.password-auth p, .account-removal p {
+    font-size: 14px;
+    color: #b9bbbe;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.two-factor {
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #2f3136;
+    border-radius: 8px;
+}
+.two-factor h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #b9bbbe;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.action-button-secondary {
+    background-color: #3ba55d; /* Green for positive actions */
+}
+.action-button-secondary:hover {
+    background-color: #349452;
+}
+
+.account-removal div {
+    display: flex;
+    gap: 10px;
+}
+.disable-button {
+    background-color: #4f545c;
+}
+.delete-button {
+    background-color: #d83c3e; /* Red for destructive actions */
+}
+.delete-button:hover {
+    background-color: #c53638;
+}
+
+/* Scrollbar styling */
+.settings-content::-webkit-scrollbar {
+    width: 8px;
+}
+.settings-content::-webkit-scrollbar-track {
+    background: #2f3136;
+    border-radius: 4px;
+}
+.settings-content::-webkit-scrollbar-thumb {
+    background: #202225;
+    border-radius: 4px;
+}

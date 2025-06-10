@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Utilisateur</title>
+    <link rel="stylesheet" href="/public/css/user.css">
+</head>
+<body>
+    <div class="settings-container">
+        <aside class="settings-sidebar">
+            <div class="sidebar-header">
+                PARAMÈTRES UTILISATEUR
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/views/myaccount.html">Mon compte</a></li>
+                    <li class="active"><a href="/user">Profils</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-button">Déconnexion</button>
+            </div>
+        </aside>
+        <main class="settings-content">
+            <section class="user-profile-settings">
+                <h1>Profils</h1>
+                <div class="profile-preview-card">
+                    <div class="profile-banner-preview">
+                        <img src="/public/img/default_banner.jpg" alt="Bannière de profil" id="bannerPreview">
+                    </div>
+                    <div class="profile-header-preview">
+                        <div class="avatar-wrapper-preview">
+                            <img src="/public/img/default_image.png" alt="Avatar" class="profile-avatar-preview" id="avatarPreview">
+                        </div>
+                        <span class="username-tag-preview" id="usernameTagPreview">VotrePseudo#1234</span>
+                    </div>
+                    <div class="profile-details-box">
+                        <div class="custom-status-section">
+                            <input type="text" id="customStatusInput" placeholder="Définir un statut personnalisé">
+                            <button class="clear-status-button" onclick="clearCustomStatus()">X</button>
+                        </div>
+
+                        <div class="about-me-section">
+                            <h3>À PROPOS DE MOI</h3>
+                            <textarea id="aboutMeTextarea" placeholder="Vous pouvez utiliser Markdown et des liens si vous le souhaitez."></textarea>
+                        </div>
+                         <div class="note-section">
+                            <h3>NOTE</h3>
+                            <textarea placeholder="Ajouter une note"></textarea>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="save-changes-button" onclick="saveProfileChanges()">Sauvegarder les modifications</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/public/js/user.js"></script>
+</body>
+</html>
