@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte</title>
+    <link rel="stylesheet" href="/public/css/myaccount.css">
+</head>
+<body>
+    <div class="settings-container">
+        <aside class="settings-sidebar">
+            <div class="sidebar-header">
+                USER SETTINGS
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="#">Mon compte</a></li>
+                    <li><a href="/views/user.html">Profils</a></li>
+                    <li><a href="#">Confidentialité</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-button">Déconnexion</button>
+            </div>
+        </aside>
+        <main class="settings-content">
+            <section class="account-settings">
+                <h1>Mon compte</h1>
+                <div class="profile-card">
+                    <div class="profile-banner">
+                    </div>
+                    <div class="profile-header">
+                        <div class="avatar-section">
+                            <img src="/public/img/default_image.png" alt="Avatar" class="profile-avatar">
+                            <span class="username-tag">VotrePseudo#1234</span>
+                        </div>
+                        <button class="edit-profile-button">Modifier le profil utilisateur</button>
+                    </div>
+                    <div class="info-box">
+                        <div class="info-item">
+                            <div>
+                                <label>NOM D'UTILISATEUR</label>
+                                <span id="usernameDisplay">VotrePseudo#1234</span>
+                            </div>
+                            <button class="edit-button" onclick="toggleEdit('username')">Modifier</button>
+                        </div>
+                        <div class="info-item-edit" id="usernameEdit" style="display: none;">
+                            <label for="newUsername">NOUVEAU NOM D'UTILISATEUR</label>
+                            <input type="text" id="newUsername" value="VotrePseudo">
+                            <label for="newTag">TAG (ex: #1234)</label>
+                            <input type="text" id="newTag" value="1234" maxlength="4">
+                            <button onclick="saveUsername()">Sauvegarder</button>
+                            <button onclick="cancelEdit('username')">Annuler</button>
+                        </div>
+
+                        <div class="info-item">
+                            <div>
+                                <label>E-MAIL</label>
+                                <span id="emailDisplay">*********@gmail.com</span>
+                            </div>
+                            <button class="edit-button" onclick="toggleEdit('email')">Modifier</button>
+                        </div>
+                         <div class="info-item-edit" id="emailEdit" style="display: none;">
+                            <label for="newEmail">NOUVEL E-MAIL</label>
+                            <input type="email" id="newEmail" placeholder="nouvel.email@example.com">
+                            <button onclick="saveEmail()">Sauvegarder</button>
+                            <button onclick="cancelEdit('email')">Annuler</button>
+                        </div>
+
+                        <div class="info-item">
+                            <div>
+                                <label>NUMÉRO DE TÉLÉPHONE</label>
+                                <span>Vous n'avez pas encore ajouté de numéro.</span>
+                            </div>
+                            <button class="add-button">Ajouter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="password-auth">
+                    <h2>Mot de passe et authentification</h2>
+                    <button class="action-button">Changer le mot de passe</button>
+                    <div class="two-factor">
+                        <h3>AUTHENTIFICATION À DEUX FACTEURS</h3>
+                        <p>Protégez votre compte contre les accès non autorisés en activant l'authentification à deux facteurs (A2F).</p>
+                        <button class="action-button-secondary">Activer l'A2F</button>
+                    </div>
+                </section>
+
+                <section class="account-removal">
+                    <h2>Suppression du compte</h2>
+                    <p>Désactiver votre compte signifie que vous pourrez le récupérer à tout moment. La suppression de votre compte est définitive.</p>
+                    <div>
+                        <button class="disable-button">Désactiver le compte</button>
+                        <button class="delete-button">Supprimer le compte</button>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+    <script src="/public/js/myaccount.js"></script>
+</body>
+</html>

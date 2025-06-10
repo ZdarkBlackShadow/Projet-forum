@@ -1,0 +1,276 @@
+body {
+    margin: 0;
+    font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #36393f;
+    color: #dcddde;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.settings-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* Sidebar styles (can be shared with profile.css or duplicated/adjusted) */
+.settings-sidebar {
+    width: 280px;
+    background-color: #2f3136;
+    padding: 60px 10px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #202225;
+}
+
+.sidebar-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: #8e9297;
+    padding: 0 10px 10px 10px;
+    text-transform: uppercase;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li a {
+    display: block;
+    padding: 10px 10px;
+    color: #b9bbbe;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.sidebar-nav li a:hover {
+    background-color: #3a3c43;
+    color: #fff;
+}
+
+.sidebar-nav li.active a {
+    background-color: #40444b; /* Active tab color */
+    color: #fff;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 10px;
+}
+
+.logout-button {
+    width: 100%;
+    padding: 8px;
+    background-color: transparent;
+    color: #b9bbbe;
+    border: 1px solid #b9bbbe;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.logout-button:hover {
+    border-color: #fff;
+    color: #fff;
+}
+
+/* Main content area */
+.settings-content {
+    flex-grow: 1;
+    padding: 60px 40px 40px 40px;
+    overflow-y: auto;
+    background-color: #36393f;
+}
+
+.settings-content h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.user-profile-settings {
+    max-width: 700px; /* Typical content width for Discord settings */
+}
+
+.profile-preview-card {
+    background-color: #202225; /* Darker background for the card */
+    border-radius: 8px;
+    overflow: hidden; /* To clip banner radius */
+}
+
+.profile-banner-preview {
+    height: 160px; /* Adjusted height for profile banner */
+    background-color: #5865f2; /* Default Discord blue, or user's banner */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-banner-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.profile-header-preview {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    margin-top: -48px; /* Pull avatar up */
+    position: relative;
+    z-index: 1;
+}
+
+.avatar-wrapper-preview {
+    background-color: #202225; /* Match card background */
+    padding: 6px; /* Space for the "border" effect */
+    border-radius: 50%;
+    margin-right: 16px;
+}
+
+.profile-avatar-preview {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    display: block;
+}
+
+.username-tag-preview {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    padding: 4px 8px;
+    background-color: rgba(32, 34, 37, 0.7); /* Semi-transparent background for readability on banner */
+    border-radius: 4px;
+}
+
+.profile-details-box {
+    padding: 20px 16px 16px 16px;
+    background-color: #202225; /* Ensure consistent background */
+}
+
+.custom-status-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.custom-status-section input[type="text"] {
+    flex-grow: 1;
+    background-color: #2f3136;
+    border: 1px solid #2f3136;
+    border-radius: 3px;
+    color: #dcddde;
+    padding: 10px;
+    font-size: 14px;
+}
+.custom-status-section input[type="text"]:focus {
+    border-color: #00b0f4;
+    outline: none;
+}
+
+.clear-status-button {
+    background: none;
+    border: none;
+    color: #b9bbbe;
+    font-size: 18px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+.clear-status-button:hover {
+    color: #fff;
+}
+
+
+.about-me-section, .discord-member-since, .badges-section, .note-section {
+    margin-bottom: 20px;
+}
+
+.about-me-section h3, .discord-member-since h3, .badges-section h3, .note-section h3 {
+    font-size: 12px;
+    color: #b9bbbe;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.about-me-section textarea, .note-section textarea {
+    width: calc(100% - 20px); /* Full width minus padding */
+    min-height: 80px;
+    background-color: #2f3136;
+    border: 1px solid #2f3136;
+    border-radius: 3px;
+    color: #dcddde;
+    padding: 10px;
+    font-size: 14px;
+    resize: vertical;
+}
+.about-me-section textarea:focus, .note-section textarea:focus {
+    border-color: #00b0f4;
+    outline: none;
+}
+
+.discord-member-since p {
+    font-size: 14px;
+    color: #dcddde;
+}
+
+.badges-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.badge {
+    width: 32px;
+    height: 32px;
+    background-color: #2f3136;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.badge img {
+    width: 24px; /* Adjust size as needed */
+    height: 24px;
+}
+
+.profile-actions {
+    padding: 16px;
+    background-color: #292b2f; /* Slightly different footer color */
+    border-top: 1px solid #202225;
+    text-align: right;
+}
+
+.save-changes-button {
+    background-color: #3ba55c; /* Discord green */
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.save-changes-button:hover {
+    background-color: #349452;
+}
+
+/* Scrollbar styling */
+.settings-content::-webkit-scrollbar {
+    width: 8px;
+}
+.settings-content::-webkit-scrollbar-track {
+    background: #2f3136;
+    border-radius: 4px;
+}
+.settings-content::-webkit-scrollbar-thumb {
+    background: #202225;
+    border-radius: 4px;
+}
