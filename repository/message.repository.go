@@ -121,3 +121,4 @@ func (r *MessageRepository) UpdateUpDownVote(messageId int, userId int, new_vote
 	}
 	return nil
 }
+

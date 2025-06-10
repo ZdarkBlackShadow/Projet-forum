@@ -91,3 +91,11 @@ func (s *UsersServices) Connect(nameOrMail string, password string) (entity.User
 
 	return user, nil
 }
+
+func (s *UsersServices) GetUser(username string) (entity.User, error) {
+	user, userErr := s.usersRepo.GetByUsername(username)
+	if userErr != nil {
+		return entity.User{}, userErr
+	}
+	return user, nil
+}

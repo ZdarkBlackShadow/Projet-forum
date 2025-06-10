@@ -131,6 +131,34 @@ func (r *UsersRepository) GetSaltByEmailOrUsername(emailOrUsername string) (stri
 	return salt, nil
 }
 
+func (r *UsersRepository) GetByUsername(username string) (entity.User, error) {
+	query := `
+		SELECT user_id, email, username, password, bio, last_conection, image_id
+		FROM users
+		WHERE username = ?;
+	`
+
+	var user entity.User
+	var lastConnection time.Time
+
+	err := r.db.QueryRow(query, username).Scan(
+		&user.UserID,
+		&user.Email,
+		&user.Username,
+		&user.Password,
+		&user.Bio,
+		&lastConnection,
+		&user.ImageID,
+	)
+	if err != nil {
+		return entity.User{}, fmt.Errorf("erreur lors de la requête : %w", err)
+	}
+
+	user.LastConnection = lastConnection
+
+	return user, nil
+}
+
 func (r *UsersRepository) GetUserByEmailOrNameAndPassword(emailOrUsername, password string) (entity.User, error) {
 	query := `
 		SELECT user_id, email, username, password, bio, last_conection, image_id

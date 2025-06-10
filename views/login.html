@@ -1,0 +1,21 @@
+{{define "login"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/connect/submit" method="post">
+        <label for="usernameOrEmail">User or Email</label>
+        <input type="text" name="usernameOrEmail" placeholder="username or email">
+    
+        <label for="password">Password</label>Add commentMore actions
+        <input type="text" name="password" placeholder="password">
+    
+        <button type="submit">Se connecter</button>
+    </form>
+</body>
+</html>
+{{end}}

@@ -186,3 +186,76 @@ func (r *ChannelRepository) AddUserToChannel(user_id int, channelId int) error {
 	}
 	return nil
 }
+
+func (r *ChannelRepository) RemoveUserFromChannel(user_id int, channelId int) error {
+	query := "DELETE FROM users_who_can_acces WHERE user_id = ? AND channel_id = ?"
+
+	_, err := r.db.Exec(query, user_id, channelId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *ChannelRepository) GetChannelUsers(channelId int) ([]entity.User, error) {
+	query := "SELECT user_id FROM users_who_can_acces WHERE channel_id = ?"
+
+	rows, err := r.db.Query(query, channelId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []entity.User
+
+	for rows.Next() {
+		var user entity.User
+		err := rows.Scan(&user.UserID)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
+
+func (r *ChannelRepository) GetChannelUsersCount(channelId int) (int, error) {
+	query := "SELECT COUNT(*) FROM users_who_can_acces WHERE channel_id = ?"
+
+	var count int
+	err := r.db.QueryRow(query, channelId).Scan(&count)
+	if err != nil {
+		return -1, err
+	}
+	return count, nil
+}
+
+func (r *ChannelRepository) GetAllPublicChannels() ([]entity.Channel, error) {
+	query := "SELECT channel_id, name, description, created_at, private, image_id, state_id, user_id FROM channels WHERE private = 0"
+
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var channels []entity.Channel
+
+	for rows.Next() {
+		var channel entity.Channel
+		err := rows.Scan(&channel.ChannelID, &channel.Name, &channel.Description, &channel.CreatedAt, &channel.Private, &channel.ImageID, &channel.StateID, &channel.UserID)
+		if err != nil {
+			return nil, err
+		}
+		channels = append(channels, channel)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return channels, nil
+}

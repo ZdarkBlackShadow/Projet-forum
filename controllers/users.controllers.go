@@ -26,6 +26,8 @@ func (c *UsersControllers) UsersRouter(r *mux.Router) {
 	r.HandleFunc("/register/submit", c.RegisterSubmit).Methods("POST")
 	r.HandleFunc("/connect/submit", c.Login).Methods("POST")
 	r.HandleFunc("/logout", c.Logout).Methods("GET")
+	r.HandleFunc("/profile/{username}", c.Profile).Methods("GET")
+	r.HandleFunc("/login", c.LoginGet).Methods("GET")
 }
 
 func (c *UsersControllers) RegisterForm(w http.ResponseWriter, r *http.Request) {
@@ -122,4 +124,20 @@ func (c *UsersControllers) Logout(w http.ResponseWriter, r *http.Request) {
 	})
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (c *UsersControllers) Profile(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	username := vars["username"]
+	user, err := c.service.GetUser(username)
+	if err != nil {
+		http.Error(w, "Erreur lors de la récupération des utilisateurs", http.StatusInternalServerError)
+		return
+	}
+
+	c.template.ExecuteTemplate(w, "users", user)
+}
+
+func (c *UsersControllers) LoginGet(w http.ResponseWriter, r *http.Request) {
+	c.template.ExecuteTemplate(w, "login", nil)
 }

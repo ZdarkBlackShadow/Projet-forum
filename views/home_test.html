@@ -1,0 +1,22 @@
+{{define "homeTest"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test home</title>
+</head>
+<body>
+    {{if eq .Userconnected true}}
+        <p>User is connected</p>
+        <h1>Info</h1>
+        <ul>
+            <li>{{.ConnectingUser.Name}}</li>
+            <li>{{.ConnectingUser.Bio}}</li>
+        </ul>
+    {{else}}
+        <p>User not connecting</p>
+    {{end}}
+</body>
+</html>
+{{end}}

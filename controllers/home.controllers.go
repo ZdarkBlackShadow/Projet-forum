@@ -28,7 +28,8 @@ func (c *HomeControllers) Home(w http.ResponseWriter, r *http.Request) {
 	var data dto.HomeModel
 	cookie, err := r.Cookie("token")
 	if err != nil {
-		tempErr := c.template.ExecuteTemplate(w, "home", nil)
+		data.Userconnected = false
+		tempErr := c.template.ExecuteTemplate(w, "homeTest", data)
 		if tempErr != nil {
 			log.Fatal(tempErr)
 		}
@@ -41,7 +42,7 @@ func (c *HomeControllers) Home(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 		return
 	}
-	tempErr := c.template.ExecuteTemplate(w, "home", data)
+	tempErr := c.template.ExecuteTemplate(w, "homeTest", data)
 	if tempErr != nil {
 		log.Fatal(tempErr)
 	}
