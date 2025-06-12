@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"projet-forum/models/dto"
 	"projet-forum/models/entity"
+	"projet-forum/models/mapper"
 	"projet-forum/repository"
 	"projet-forum/utils"
 	"strconv"
@@ -87,32 +88,38 @@ func (s *ChannelService) CreateChannel(channelInfo dto.ChannelCreation, channelI
 	return s.channelRepo.CreateChannel(newChannel)
 }
 
-func (s *ChannelService) GetChannelById(channelId string, token string) (entity.Channel, error) {
+func (s *ChannelService) GetChannelById(channelId string, token string) (dto.Channel, error) {
 	userId, jwtErr := utils.VerifyJWT(token)
 	if jwtErr != nil {
-		return entity.Channel{}, jwtErr
+		return dto.Channel{}, jwtErr
 	}
 
 	intUserId, convErr := strconv.Atoi(userId)
 	if convErr != nil {
-		return entity.Channel{}, convErr
+		return dto.Channel{}, convErr
 	}
 
 	intChannelId, convErr := strconv.Atoi(channelId)
 	if convErr != nil {
-		return entity.Channel{}, convErr
+		return dto.Channel{}, convErr
 	}
 
 	canAccess, accesErr := s.channelRepo.VerifyAccess(intChannelId, intUserId)
 	if accesErr != nil {
-		return entity.Channel{}, accesErr
+		return dto.Channel{}, accesErr
 	}
 
 	if !canAccess {
-		return entity.Channel{}, fmt.Errorf("Can't access to this channel")
+		return dto.Channel{}, fmt.Errorf("Can't access to this channel")
 	}
 
-	return s.channelRepo.GetChannelById(intChannelId)
+	channel, err := s.channelRepo.GetChannelById(intChannelId)
+	owner, err := s.usersRepo.GetById(strconv.Itoa(channel.UserID))
+	tags, err := s.tagRepo.GetTagsByChannelId(intChannelId)
+
+	channelDto := mapper.ChannelEntityToDTO(channel, mapper.UserEntityToDTO(owner), tags)
+
+	return channelDto, err
 }
 
 func (s *ChannelService) AddTagToChannel(channelId string, tags []string, token string) error {

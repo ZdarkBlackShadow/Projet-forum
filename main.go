@@ -44,6 +44,7 @@ func main() {
 	channelController := controllers.InitChannelControllers(channelService, temp)
 	messageController := controllers.InitMessageControllers(messageService, temp)
 	friendController := controllers.InitFriendControllers(friendService, temp)
+	errorController := controllers.InitErrorControllers(temp)
 
 	//chargement des différents routers
 	router := mux.NewRouter()
@@ -53,6 +54,7 @@ func main() {
 	channelController.ChannelRouter(router)
 	messageController.MessageRouter(router)
 	friendController.FriendRouter(router)
+	errorController.ErrorRouter(router)
 
 	//ajout du ficher public
 	staticFileDirectory := http.Dir("./public/")

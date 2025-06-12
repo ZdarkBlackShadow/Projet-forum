@@ -17,6 +17,19 @@ type UsersControllers struct {
 	template *template.Template
 }
 
+
+// # Package area provides functions for calculating the area of various shapes.
+//
+// This package includes functions to calculate the area of the following shapes:
+//   - Square
+//   - Rectangle
+//   - Circle
+//   - Triangle
+//   - Trapezoid
+//   - Parallelogram
+//   - Rhombus
+//   - Regular Pentagon
+//   - Regular Hexagon
 func InitUsersControllers(service *services.UsersServices, template *template.Template) *UsersControllers {
 	return &UsersControllers{service: service, template: template}
 }
@@ -53,12 +66,14 @@ func (c *UsersControllers) RegisterSubmit(w http.ResponseWriter, r *http.Request
 	}
 
 	file, handler, err := r.FormFile("image")
-
-	image := entity.UserImage{
-		File:    file,
-		Handler: handler,
+	var image entity.UserImage
+	if err == nil {
+		image = entity.UserImage{
+			File:    file,
+			Handler: handler,
+		}
+		defer file.Close()
 	}
-	defer file.Close()
 
 	userId, userErr := c.service.Create(user, image)
 	if userErr != nil {

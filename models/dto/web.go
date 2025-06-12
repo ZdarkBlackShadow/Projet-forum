@@ -67,6 +67,6 @@ type FriendRequest struct {
 }
 
 type ChannelInvitation struct {
-	ChannelId int
+	ChannelId string
 	UserId    int
 }

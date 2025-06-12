@@ -37,7 +37,7 @@ func (c *HomeControllers) Home(w http.ResponseWriter, r *http.Request) {
 	} else {
 		cookieValue = cookie.Value
 	}
-	data, dataErr := c.service.GetUser(cookieValue)
+	data, dataErr := c.service.Home(cookieValue)
 	if dataErr != nil {
 		log.Fatal(err)
 		return
@@ -46,5 +46,4 @@ func (c *HomeControllers) Home(w http.ResponseWriter, r *http.Request) {
 	if tempErr != nil {
 		log.Fatal(tempErr)
 	}
-
 }

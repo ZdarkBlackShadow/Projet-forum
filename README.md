@@ -28,3 +28,23 @@ DB_PWD =
 DB_HOST =
 JWT_SECRET =
 ```
+
+## Read the documentation with godoc
+
+### Install godoc
+
+```bash
+go install golang.org/x/tools/cmd/godoc@latest
+```
+
+### Start the godoc serve
+
+```bash
+godoc -http=:6060
+```
+
+### The address to put in your browser
+
+```bash
+http://localhost:6060/pkg/projet-forum/
+```
