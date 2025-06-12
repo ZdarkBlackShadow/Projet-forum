@@ -1,20 +1,12 @@
-// Initialisation des conversations
 document.addEventListener('DOMContentLoaded', function() {
-    // Charger les conversations existantes
     loadConversations();
-    
-    // Gestion de l'envoi de messages
     document.getElementById('sendMessage')?.addEventListener('click', sendMessage);
 });
 
 function loadConversations() {
-    // Ici vous devriez charger les conversations depuis votre backend
-    // Pour l'exemple, nous créons une conversation par défaut
     const conversationList = document.getElementById('conversationList');
     const defaultConv = createConversationElement('ZdarkBlackShadow', '1');
     conversationList.appendChild(defaultConv);
-    
-    // Afficher la première conversation par défaut
     if (defaultConv) {
         defaultConv.click();
     }
@@ -30,18 +22,11 @@ function createConversationElement(name, id) {
     `;
     
     conv.addEventListener('click', function() {
-        // Activer la conversation
         document.querySelectorAll('.conversation').forEach(c => c.classList.remove('active'));
         this.classList.add('active');
-        
-        // Afficher la zone de chat
         document.getElementById('chatArea').style.display = 'flex';
-        
-        // Mettre à jour l'en-tête
         document.getElementById('chatName').textContent = name;
         document.getElementById('chatAvatar').textContent = name.substring(0, 2);
-        
-        // Charger les messages (à remplacer par un appel à votre backend)
         loadMessages(id);
     });
     
@@ -49,7 +34,6 @@ function createConversationElement(name, id) {
 }
 
 function loadMessages(conversationId) {
-    // Ici vous devriez charger les messages depuis votre backend
     const chatMessages = document.getElementById('chatMessages');
     chatMessages.innerHTML = `
         <div class="message">
@@ -85,10 +69,7 @@ function sendMessage() {
             chatMessages.appendChild(messageElement);
             messageInput.value = '';
             
-            // Faire défiler vers le bas
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            // Ici vous devriez envoyer le message à votre backend
             console.log('Message envoyé:', message);
         }
     }
@@ -97,8 +78,6 @@ function sendMessage() {
 function acceptMessageRequest() {
     const popup = document.getElementById('messagePopup');
     popup.style.display = 'none';
-    
-    // Créer une nouvelle conversation
     const conversationList = document.getElementById('conversationList');
     const newConv = createConversationElement('Nouvel Ami', Date.now());
     conversationList.appendChild(newConv);
@@ -110,24 +89,35 @@ function rejectMessage() {
     document.getElementById('messagePopup').style.display = 'none';
 }
 
-fetch('/static/txt/emoji.txt')
-    .then(response => response.text())
-    .then(data => {
-        const emojiList = document.getElementById('emojiList');
-        const emojis = data.split(/\s+/).filter(e => e.trim().length > 0);
-        emojis.forEach(emoji => {
-            const span = document.createElement('span');
-            span.textContent = emoji;
-            span.className = 'emoji-item';
-            span.style.cursor = 'pointer';
-            span.onclick = function() {
-                const input = document.getElementById('messageInput');
-                input.value += emoji;
-                input.focus();
-            };
-            emojiList.appendChild(span);
+function loadEmojisDynamic() {
+    const emojiList = document.getElementById('emojiList');
+    emojiList.innerHTML = '';
+    fetch('/public/txt/emoji.txt')
+        .then(response => response.text())
+        .then(data => {
+            const emojis = data.split(/\s+/).filter(e => e.trim().length > 0);
+            emojis.forEach(emoji => {
+                const span = document.createElement('span');
+                span.textContent = emoji;
+                span.classList.add('emoji-item');
+                span.style.cursor = 'pointer';
+                span.addEventListener('click', () => {
+                    const input = document.getElementById('messageInput');
+                    input.value += emoji;
+                    input.focus();
+                });
+                emojiList.appendChild(span);
+            });
+        })
+        .catch(err => {
+            console.error("Erreur de chargement des emojis:", err);
+            emojiList.textContent = "Erreur de chargement";
         });
-    })
-    .catch(err => {
-        console.error("Erreur de chargement des emojis:", err);
-    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const emojiPanel = document.getElementById('emojiPanel');
+    if(emojiPanel) {
+        loadEmojisDynamic();
+    }
+});

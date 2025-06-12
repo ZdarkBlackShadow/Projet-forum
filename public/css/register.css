@@ -1,64 +1,140 @@
 body {
-    background: url('../img/background.png') no-repeat center center fixed;
+    background: url('/static/img/background.png') no-repeat center center fixed;
     background-size: cover;
     font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #fff;
     margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 
 .register-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .register-card {
     background: #2f3136;
-    padding: 40px;
+    padding: 30px 40px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    width: 350px;
-    text-align: center;
+    width: 400px; /* Slightly wider to accommodate labels */
+    max-width: 100%;
+    text-align: left;
     animation: fadeIn 1s ease-out;
 }
 
 .register-card h1 {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     font-size: 24px;
+    text-align: center; /* Center the main title */
+    color: #fff; /* Ensure title color is white */
+}
+
+.register-card form label {
+    display: block; /* Make labels take full width */
+    margin-bottom: 5px; /* Space between label and input */
+    font-size: 12px; /* Smaller font size for labels */
+    color: #b9bbbe; /* Lighter grey for labels, like Discord */
+    font-weight: 600;
+    text-transform: uppercase; /* Uppercase labels */
 }
 
 /* Champs du formulaire */
 .register-card form input[type="text"],
 .register-card form input[type="email"],
 .register-card form input[type="password"],
-.register-card form textarea,
-.register-card form input[type="file"] {
+.register-card form textarea {
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
+    padding: 10px; /* Adjusted padding */
+    margin-bottom: 15px; /* Space after each input/textarea */
     border: 1px solid #202225;
-    border-radius: 4px;
-    background: #202225;
+    border-radius: 3px; /* Slightly less rounded */
+    background: #202225; /* Darker background for inputs */
+    color: #dcddde; /* Text color for inputs */
+    box-sizing: border-box;
+    font-size: 14px; /* Font size for input text */
+}
+
+.register-card form textarea {
+    min-height: 80px; /* Set a min-height for textarea */
+    resize: vertical; /* Allow vertical resize */
+}
+
+.register-card form input[type="file"] {
+    /* Standard browser file input is hard to style directly. */
+    /* The HTML uses a label for the file input, so we style that. */
+    /* If you want a custom-looking file input, more complex HTML/JS is needed. */
+    /* For now, ensure the label for it is clear. */
+    margin-bottom: 15px; /* Space after file input section */
+    color: #b9bbbe; /* Match label color */
+}
+
+.register-card form .file-label { /* Specific styling for the "Choisir fichier" label if needed */
+    background-color: #4f545c; /* Button-like appearance */
     color: #fff;
+    padding: 10px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-block; /* To allow padding and not take full width */
+    margin-bottom: 15px; /* Consistent margin */
+    text-transform: none; /* Override uppercase if set on general labels */
+    font-weight: 500;
+    font-size: 14px;
+}
+.register-card form .file-label:hover {
+    background-color: #5d6269;
+}
+
+
+/* Remove <br><br> effect by ensuring inputs have enough margin-bottom */
+.register-card form br {
+    display: none; /* Hide <br> tags as spacing is handled by margins */
 }
 
 /* Bouton */
 .register-card form button {
     width: 100%;
     padding: 12px;
-    margin: 20px 0;
+    margin-top: 10px; /* Adjusted margin-top */
+    margin-bottom: 20px; /* Consistent margin */
     border: none;
-    border-radius: 4px;
-    background: #7289da;
+    border-radius: 3px;
+    background: #5865f2; /* Discord blurple */
     color: #fff;
-    font-weight: bold;
+    font-weight: 500; /* Adjusted font-weight */
+    font-size: 16px; /* Button text size */
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background-color 0.2s ease;
 }
 
 .register-card form button:hover {
-    background: #677bc4;
+    background: #4752c4; /* Darker blurple */
+}
+
+/* Link to login page */
+.register-card .login-link {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #b9bbbe;
+    text-align: center; /* Center the login link */
+}
+
+.register-card .login-link a {
+    color: #00b0f4; /* Discord link blue */
+    text-decoration: none;
+    font-weight: 500;
+    transition: text-decoration 0.2s ease;
+}
+
+.register-card .login-link a:hover {
+    text-decoration: underline;
 }
 
 /* Animation d'apparition */
