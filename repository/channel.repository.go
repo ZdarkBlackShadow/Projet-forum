@@ -235,7 +235,7 @@ func (r *ChannelRepository) GetChannelUsersCount(channelId int) (int, error) {
 }
 
 func (r *ChannelRepository) GetAllPublicChannels() ([]entity.Channel, error) {
-	query := "SELECT channel_id, name, description, created_at, private, image_id, state_id, user_id FROM channels WHERE private = 0"
+	query := "SELECT channel_id, name, description, created_at, private, image_id, state_id, user_id FROM channel WHERE private = 0"
 
 	rows, err := r.db.Query(query)
 	if err != nil {

@@ -87,7 +87,7 @@ func (s *HomeServices) Home(token string) (dto.HomeModel, error) {
 			}
 
 			messagesDto = append(messagesDto, dto.Message{
-				Id:        message.MessageTextID,
+				Id:     message.MessageTextID,
 				Text:   message.Text,
 				Edited: message.Edited,
 				Creator: dto.User{
