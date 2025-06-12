@@ -20,7 +20,7 @@ type Channel struct {
 	Id          int
 	Name        string
 	Description string
-	IsPrivate     bool
+	IsPrivate   bool
 	Owner       User
 	Messages    []Message
 	Tags        []string
@@ -69,4 +69,11 @@ type FriendRequest struct {
 type ChannelInvitation struct {
 	ChannelId string
 	UserId    int
+}
+
+type UserInformation struct {
+	Email    string
+	Username string
+	Bio      string
+	Image    string
 }

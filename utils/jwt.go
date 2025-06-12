@@ -1,3 +1,4 @@
+// Package utils provides utility functions for the forum application.
 package utils
 
 import (
@@ -8,6 +9,17 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// GenerateJWT creates a new JWT token for the given user ID.
+//
+// It uses the JWT_SECRET environment variable to sign the token.
+// The token includes the following claims:
+//   - sub: the user ID
+//   - exp: expiration time (1 hour from creation)
+//   - iat: issued at time
+//   - iss: issuer ("forum")
+//
+// Returns the signed token string and any error encountered.
+// If JWT_SECRET is not set, it returns an error.
 func GenerateJWT(userID string) (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
@@ -27,6 +39,17 @@ func GenerateJWT(userID string) (string, error) {
 	return tokenString, nil
 }
 
+// VerifyJWT validates a JWT token and extracts the user ID.
+//
+// It uses the JWT_SECRET environment variable to verify the token signature.
+// The function performs the following validations:
+//   - Checks if the token signature is valid
+//   - Verifies the signing method is HMAC
+//   - Ensures the token has not expired
+//
+// Returns the user ID from the token's "sub" claim and any error encountered.
+// If JWT_SECRET is not set, the token is invalid, or the token has expired,
+// it returns an appropriate error.
 func VerifyJWT(tokenString string) (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {

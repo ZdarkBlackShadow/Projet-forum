@@ -22,6 +22,7 @@ func InitFriendControllers(service *services.FriendService, template *template.T
 
 func (c *FriendControllers) FriendRouter(r *mux.Router) {
 	r.HandleFunc("/create/friend-request", c.CreateFriendRequest).Methods("POST")
+	r.HandleFunc("/accept/friend-request", c.AcceptFriendRequest).Methods("POST")
 }
 
 func (c *FriendControllers) CreateFriendRequest(w http.ResponseWriter, r *http.Request) {
