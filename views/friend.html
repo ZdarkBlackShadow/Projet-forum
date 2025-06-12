@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/public/css/friend.css">
+    <link rel="stylesheet" href="/static/css/friend.css"> <!-- Changed path -->
     <title>Friend</title>
 </head>
 <body>
@@ -11,12 +11,12 @@
         <aside class="sidebar-left">
             <div class="friends-button">
                 <button onclick="location.href='/friends'">
-                    <img src="/public/img/Logo.jpg" alt="Friends Logo">
+                    <img src="/static/img/Logo.jpg" alt="Friends Logo"> <!-- Changed path -->
                 </button>
             </div>
             <div class="profile-button">
                 <a href="/user">
-                    <img src="/public/img/default_image.png" alt="Profil">
+                    <img src="/static/img/default_image.png" alt="Profil"> <!-- Changed path -->
                 </a>
             </div>
         </aside>
@@ -42,13 +42,11 @@
                     <button type="button" onclick="toggleMessagePopup()">Demande de message</button>
                 </div>
                 <div class="conversation-list" id="conversationList">
-                    <!-- Sample conversation item with delete button -->
                     <div class="conversation" id="conversation-1">
                         <div class="conversation-avatar">X</div>
                         <div class="conversation-name">Utilisateur X</div>
                         <button class="delete-conv-btn" onclick="removeConversation('conversation-1')">Supprimer</button>
                     </div>
-                    <!-- ...other conversation items... -->
                 </div>
                 <div class="message-popup" id="messagePopup" style="display:none;">
                     <h3>Demandes de message</h3>
@@ -84,7 +82,7 @@
             </div>
         </section>
     </div>
-    <script src="/public/js/friend.js"></script>
-    <script src="/public/js/messages.js"></script>
+    <script src="/static/js/friend.js"></script> <!-- Changed path -->
+    <script src="/static/js/messages.js"></script> <!-- Changed path -->
 </body>
 </html>

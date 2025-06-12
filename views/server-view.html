@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serveur</title>
+    <link rel="stylesheet" href="/public/css/server-view.css">
+</head>
+<body>
+    <div class="server-layout">
+        <aside class="server-sidebar">
+            <div class="server-header">
+                <h1 id="serverNameDisplay">Nom du Serveur</h1>
+                <button class="settings-button" id="serverSettingsButton" title="Paramètres du serveur">⚙️</button>
+            </div>
+            <div class="channels-list">
+                <div class="channel-category">
+                    <span>SALONS TEXTUELS</span>
+                    <button class="add-channel-button" title="Créer un salon">+</button>
+                </div>
+                <ul id="textChannelsList">
+                    <li class="channel-item active" data-channel-id="general"><span class="hash">#</span> général</li>
+                    <li class="channel-item" data-channel-id="annonces"><span class="hash">#</span> annonces</li>
+                    <li class="channel-item" data-channel-id="discussions"><span class="hash">#</span> discussions</li>
+                </ul>
+            </div>
+            <div class="user-panel-preview">
+                <img src="/public/img/default_image.png" alt="User Avatar" class="user-avatar-preview">
+                <span class="username-preview">VotrePseudo</span>
+                <div class="user-controls-preview">
+                    <button title="Microphone">🎤</button>
+                    <button title="Casque">🎧</button>
+                    <button title="Paramètres utilisateur">⚙️</button>
+                </div>
+            </div>
+        </aside>
+        <main class="chat-area-server">
+            <div class="chat-header-server">
+                <span class="hash">#</span> <span id="currentChannelName">général</span>
+            </div>
+            <div class="chat-messages-server" id="chatMessagesServer">
+                <div class="message-item-server">
+                    <img src="/public/img/default_image.png" alt="Avatar" class="message-avatar-server">
+                    <div class="message-content-server">
+                        <span class="message-author-server">UtilisateurExemple <span class="message-timestamp">Aujourd'hui à 14:30</span></span>
+                        <p class="message-text-server">Bienvenue sur le serveur !</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-server">
+                <button class="attach-button-server">+</button>
+                <input type="text" id="messageInputServer" placeholder="Envoyer un message dans #général">
+                <button class="gif-button-server">GIF</button>
+                <button class="emoji-button-server">😀</button>
+            </div>
+        </main>
+    </div>
+    <script src="/public/js/server-view.js"></script>
+</body>
+</html>

@@ -1,21 +1,26 @@
 {{define "login"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Connexion</title>
+    <link rel="stylesheet" href="/static/css/login.css">
 </head>
 <body>
-    <form action="/connect/submit" method="post">
-        <label for="usernameOrEmail">User or Email</label>
-        <input type="text" name="usernameOrEmail" placeholder="username or email">
-    
-        <label for="password">Password</label>Add commentMore actions
-        <input type="text" name="password" placeholder="password">
-    
-        <button type="submit">Se connecter</button>
-    </form>
+    <div class="login-container">
+        <div class="login-card">
+            <h1>Connexion</h1>
+            <form action="/connect/submit" method="post">
+                <input type="text" name="usernameOrEmail" placeholder="Nom d'utilisateur ou Email" required>
+            
+                <input type="password" name="password" placeholder="Mot de passe" required>
+            
+                <button type="submit">Se connecter</button>
+            </form>
+            <p class="login-link">Pas encore de compte ? <a href="/register">Inscrivez-vous</a></p>
+        </div>
+    </div>
 </body>
 </html>
 {{end}}

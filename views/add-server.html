@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un serveur</title>
+    <link rel="stylesheet" href="/static/css/add-server.css"> <!-- Changed path -->
+</head>
+<body>
+    <div class="add-server-container">
+        <div class="add-server-card">
+            <button class="close-button" onclick="history.back()">×</button>
+            <h1>Crée ton serveur</h1>
+            <p>Ton serveur est l'endroit où tu passes du temps avec tes amis. Crée le tien et commence à discuter.</p>
+            
+            <div class="server-template-option" id="createMyOwn">
+                <img src="/static/img/create_own_icon.svg" alt="Créer le mien"> <!-- Changed path -->
+                <div>
+                    <h2>Créer le mien</h2>
+                    <p>Commence avec quelques salons et catégories de base que tu pourras personnaliser.</p>
+                </div>
+                <span class="arrow">&gt;</span>
+            </div>
+
+            <div class="templates-section">
+                <h3>COMMENCER AVEC UN MODÈLE</h3>
+                <div class="server-template-option">
+                    <img src="/static/img/gaming_template_icon.svg" alt="Gaming"> <!-- Changed path -->
+                    <div>Gaming</div>
+                    <span class="arrow">&gt;</span>
+                </div>
+                <div class="server-template-option">
+                    <img src="/static/img/study_template_icon.svg" alt="Groupe d'étude"> <!-- Changed path -->
+                    <div>Groupe d'étude</div>
+                    <span class="arrow">&gt;</span>
+                </div>
+            </div>
+
+            <div class="server-creation-form" id="serverCreationForm" style="display:none;">
+                <h2>Personnalise ton serveur</h2>
+                <p>Donne un nom à ton serveur et ajoute une icône pour le personnaliser. Tu pourras toujours le modifier plus tard.</p>
+                <div class="upload-icon-section">
+                    <div class="icon-uploader" id="iconUploader">
+                        <img src="/static/img/upload_icon_placeholder.jpg" alt="Icône du serveur" id="serverIconPreview"> <!-- Changed path -->
+                        <input type="file" id="serverIconInput" accept="image/*" style="display:none;">
+                        <span>CHARGER</span>
+                    </div>
+                </div>
+                <label for="serverNameInput">NOM DU SERVEUR</label>
+                <input type="text" id="serverNameInput" placeholder="Serveur de VotrePseudo">
+                <p class="agreement-text">En créant un serveur, tu acceptes les <a href="#">Règles communautaires</a> de Discord.</p>
+                <div class="form-actions">
+                    <button class="back-button" id="backToTemplatesButton">Retour</button>
+                    <button class="create-button" id="createServerButton">Créer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/add-server.js"></script> <!-- Changed path -->
+</body>
+</html>
