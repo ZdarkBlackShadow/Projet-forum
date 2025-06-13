@@ -50,7 +50,7 @@ func (r *TagRepository) DeleteTag(tagId int) error {
 	return nil
 }
 
-func (r *TagRepository) AddTagToChannel (channelId int, tagId int) error {
+func (r *TagRepository) AddTagToChannel(channelId int, tagId int) error {
 	query := "INSERT INTO channel_tags (channel_id, tag_id) VALUES (?, ?)"
 
 	_, err := r.db.Exec(query, channelId, tagId)
@@ -61,7 +61,7 @@ func (r *TagRepository) AddTagToChannel (channelId int, tagId int) error {
 	return nil
 }
 
-func (r *TagRepository) RemoveTagFromChannel (channelId int, tagId int) error {
+func (r *TagRepository) RemoveTagFromChannel(channelId int, tagId int) error {
 	query := "DELETE FROM channel_tags WHERE channel_id = ? AND tag_id = ?"
 
 	_, err := r.db.Exec(query, channelId, tagId)

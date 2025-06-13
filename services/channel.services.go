@@ -20,7 +20,8 @@ type ChannelService struct {
 	usersRepo   *repository.UsersRepository
 	imageRepo   *repository.ImageRepository
 	tagRepo     *repository.TagRepository
-	updownRepo * repository.UpDownVoteRepository
+	updownRepo  *repository.UpDownVoteRepository
+	messageRepo *repository.MessageRepository
 }
 
 func InitChannelServices(db *sql.DB) *ChannelService {
@@ -29,6 +30,8 @@ func InitChannelServices(db *sql.DB) *ChannelService {
 		usersRepo:   repository.InitUsersRepository(db),
 		imageRepo:   repository.InitImageRepository(db),
 		tagRepo:     repository.InitTagRepository(db),
+		updownRepo:  repository.InitUpDownVoteRepository(db),
+		messageRepo: repository.InitMessageRepository(db),
 	}
 }
 
@@ -116,11 +119,21 @@ func (s *ChannelService) GetChannelById(channelId string, token string) (dto.Cha
 	channel, err := s.channelRepo.GetChannelById(intChannelId)
 	owner, err := s.usersRepo.GetById(strconv.Itoa(channel.UserID))
 	tags, err := s.tagRepo.GetTagsByChannelId(intChannelId)
-	channelDto := mapper.ChannelEntityToDTO(channel, mapper.UserEntityToDTO(owner), tags)
+	messages, err := s.messageRepo.GetMessagesByChannelID(intChannelId)
+	var creatorList []dto.User
+	for _, message := range messages {
+		creator, err := s.usersRepo.GetById(strconv.Itoa(message.UserID))
+		if err != nil {
+			return dto.Channel{}, err
+		}
+		creatorList = append(creatorList, mapper.UserEntityToDTO(creator))
+	}
+	dtoMessages := mapper.ListOfMessagesEntityToDTO(messages, creatorList)
+	channelDto := mapper.ChannelEntityToDTO(channel, mapper.UserEntityToDTO(owner), tags, dtoMessages)
 	return channelDto, err
 }
 
-func (s *ChannelService) AddTagToChannel(channelId string, tags []string, token string) error {
+func (s *ChannelService) AddTagToChannel(channelId string, tag string, token string) error {
 	userId, jwtErr := utils.VerifyJWT(token)
 	if jwtErr != nil {
 		return jwtErr
@@ -144,17 +157,14 @@ func (s *ChannelService) AddTagToChannel(channelId string, tags []string, token 
 	if !canAccess {
 		return fmt.Errorf("Can't access to this channel")
 	}
+	intTagId, reqErr := s.tagRepo.GetTagIdByName(tag)
+	if reqErr != nil {
+		return reqErr
+	}
 
-	for _, tag := range tags {
-		intTagId, reqErr := s.tagRepo.GetTagIdByName(tag)
-		if reqErr != nil {
-			return reqErr
-		}
-
-		err := s.tagRepo.AddTagToChannel(intChannelId, intTagId)
-		if err != nil {
-			return err
-		}
+	err := s.tagRepo.AddTagToChannel(intChannelId, intTagId)
+	if err != nil {
+		return err
 	}
 	return nil
 }
@@ -248,7 +258,7 @@ func (s *ChannelService) CreateTag(channelId string, tagName string, token strin
 		return creationErr
 	}
 
-	return s.tagRepo.AddTagToChannel(newTagId, intChannleId)
+	return s.tagRepo.AddTagToChannel(intChannleId, newTagId)
 }
 
 func (s *ChannelService) CreateChannelIvitation(token string, usernameWhoAreInvited string, channelId string) error {

@@ -16,7 +16,7 @@ func UserEntityToDTO(e entity.User) dto.User {
 }
 
 // ChannelEntityToDTO convertit une entité Channel en DTO Channel
-func ChannelEntityToDTO(e entity.Channel, owner dto.User, tags []string) dto.Channel {
+func ChannelEntityToDTO(e entity.Channel, owner dto.User, tags []string, messages []dto.Message) dto.Channel {
 	return dto.Channel{
 		Id:          e.ChannelID,
 		Name:        e.Name,
@@ -24,6 +24,7 @@ func ChannelEntityToDTO(e entity.Channel, owner dto.User, tags []string) dto.Cha
 		IsPrivate:   e.Private,
 		Owner:       owner,
 		Tags:        tags,
+		Messages: messages,
 	}
 }
 
@@ -66,4 +67,12 @@ func ChannelInvitationEntityToDTO(e entity.ChannelInvitation) dto.ChannelInvitat
 		ChannelId: e.ChannelID,
 		UserId:    e.UserID,
 	}
+}
+
+func ListOfMessagesEntityToDTO(messages []entity.Message, creators []dto.User) []dto.Message {
+	var messagesDTO []dto.Message
+	for index, message := range messages {
+		messagesDTO = append(messagesDTO, MessageEntityToDTO(message, creators[index], dto.Image{}, []string{}))
+	}
+	return messagesDTO
 }

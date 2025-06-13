@@ -143,7 +143,7 @@ func (c *ChannelControllers) AddTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tags := r.Form["tag"]
+	tags := r.FormValue("tag")
 
 	err := c.service.AddTagToChannel(channelId, tags, cookie.Value)
 	if err != nil {
@@ -191,6 +191,7 @@ func (c *ChannelControllers) CreateTag(w http.ResponseWriter, r *http.Request) {
 
 	err := c.service.CreateTag(channelId, tag, cookie.Value)
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, "Erreur lors de la création du tag", http.StatusBadRequest)
 		return
 	}

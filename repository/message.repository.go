@@ -15,7 +15,7 @@ func InitMessageRepository(db *sql.DB) *MessageRepository {
 }
 
 func (r *MessageRepository) CreateMessage(message entity.Message) (int, error) {
-	result, err := r.db.Exec("INSERT INTO `message`(`text`, `created_at`, `edited`, `image`, `user_id`, `channel_id`) VALUES ('?','?','?','?','?','?');",
+	result, err := r.db.Exec("INSERT INTO `message`(`text`, `created_at`, `edited`, `image`, `user_id`, `channel_id`) VALUES (?,?,?,?,?,?);",
 		message.Text,
 		time.Now(),
 		false,
@@ -45,7 +45,7 @@ func (r *MessageRepository) GetMessageByID(id int) (entity.Message, error) {
 
 func (r *MessageRepository) GetMessagesByChannelID(channelID int) ([]entity.Message, error) {
 	var messages []entity.Message
-	rows, err := r.db.Query("SELECT `id`, `text`, `created_at`, `edited`, `image`, `user_id`, `channel_id` FROM `message` WHERE `channel_id` = ?;", channelID)
+	rows, err := r.db.Query("SELECT `message_text_id`, `text`, `created_at`, `edited`, `image`, `user_id`, `channel_id` FROM `message` WHERE `channel_id` = ?;", channelID)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,6 @@ func (r *MessageRepository) DeleteMessagesByUserID(userID int) error {
 	return nil
 }
 
-
 func (r *MessageRepository) AddUpDownVote(messageId int, userId int, voteId int) error {
 	_, err := r.db.Exec("INSERT INTO `up_down`(`user_id`, `message_text_id`, `up_down_vote_id`) VALUES ('?', '?', '?');",
 		userId,
@@ -121,4 +120,3 @@ func (r *MessageRepository) UpdateUpDownVote(messageId int, userId int, new_vote
 	}
 	return nil
 }
-

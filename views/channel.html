@@ -9,6 +9,29 @@
 <body>
     <p>{{.Id}}</p>
     <p>{{.Name}}</p>
+    {{range .Tags}}
+        <h1>{{.}}</h1>
+    {{end}}
+    <h2>Créer un tag</h2>
+    <form action="/create/tag/{{.Id}}" method="post">
+        <label for="tag">tag name</label>
+        <input type="text" name="tag" id="tag" placeholder="tag">
+    </form>
+    <h2>Ajouter un tag</h2>
+    <form action="/add/tag/{{.Id}}" method="post">
+        <label for="tag">tag name</label>
+        <input type="text" name="tag" id="tag" placeholder="tag">
+    </form>
+    <h2>Messages</h2>
+    {{range .Messages}}
+        <h3>{{.Id}}</h3>
+        <h4>{{.Text}}</h4>
+    {{end}}
+    <h2>Fomulaire des messages</h2>
+    <form action="/create/message/{{.Id}}" method="post">
+        <label for="textContent"></label>
+        <input type="text" name="textContent" id="textContent" placeholder="message">
+    </form>
 </body>
 </html>
 {{end}}

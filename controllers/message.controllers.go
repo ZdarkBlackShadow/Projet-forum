@@ -35,7 +35,7 @@ func InitMessageControllers(service *services.MessageServices, template *templat
 // Parameters:
 //   - r: the Gorilla Mux router to register the message routes with.
 func (c *MessageControllers) MessageRouter(r *mux.Router) {
-	r.HandleFunc("/create/message", c.CreateMessage).Methods("POST")
+	r.HandleFunc("/create/message/{id}", c.CreateMessage).Methods("POST")
 	r.HandleFunc("/delete/message", c.DeleteMessage).Methods("POST")
 	r.HandleFunc("/update/message", c.UpdateMessage).Methods("POST")
 	r.HandleFunc("/create/updownvote", c.AddUpDownVote).Methods("POST")
@@ -47,6 +47,8 @@ func (c *MessageControllers) MessageRouter(r *mux.Router) {
 // Expects "textContent" and "channelId" form values and a "token" cookie for authentication.
 // Redirects to the channel page after successful creation.
 func (c *MessageControllers) CreateMessage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelId := vars["id"]
 	cookie, err := r.Cookie("token")
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
@@ -54,7 +56,6 @@ func (c *MessageControllers) CreateMessage(w http.ResponseWriter, r *http.Reques
 	}
 
 	text := r.FormValue("textContent")
-	channelId := r.FormValue("channelId")
 
 	_, err = c.service.CreateMessage(text, channelId, cookie.Value)
 	if err != nil {
