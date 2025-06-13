@@ -38,8 +38,8 @@ body {
 }
 
 .friends-button img {
-    width: 40px;
-    height: 40px;
+    width: 50px; /* Changed from 40px */
+    height: 50px; /* Changed from 40px */
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #7289da;
@@ -50,8 +50,8 @@ body {
 }
 
 .profile-button img {
-    width: 40px;
-    height: 40px;
+    width: 50px; /* Changed from 40px */
+    height: 50px; /* Changed from 40px */
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
@@ -91,6 +91,12 @@ body {
 }
 .categories-nav li:hover {
     background: #7289da;
+}
+
+.categories-nav li.active-category { /* Style for the active category */
+    background: #7289da;
+    color: #fff;
+    font-weight: bold;
 }
 
 .search-bar {
@@ -135,7 +141,7 @@ body {
 
 .add-server-bubble {
     position: absolute;
-    bottom: 70px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
     width: 50px;

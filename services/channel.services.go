@@ -63,24 +63,31 @@ func (s *ChannelService) CreateChannel(channelInfo dto.ChannelCreation, channelI
 	if channelImage.File != nil && channelImage.Handler != nil {
 		err := os.MkdirAll("images/servers", os.ModePerm)
 		if err != nil {
+			fmt.Println(0)
 			return -1, err
 		}
-		imageName := channelImage.Handler.Filename
-		dstPath := filepath.Join("images/servers", imageName)
+		//imageName := channelImage.Handler.Filename
+		dstPath := filepath.Join("images/servers", "test.txt")
 
 		dst, dstErr := os.Create(dstPath)
 		if dstErr != nil {
+			fmt.Println(1)
+			stat, _ := dst.Stat()
+			fmt.Println(stat.Mode().Perm())
 			return -1, dstErr
 		}
+
 		defer dst.Close()
 
 		_, copyErr := io.Copy(dst, channelImage.File)
 		if copyErr != nil {
+			fmt.Println(2)
 			return -1, copyErr
 		}
 
 		imageId, imageErr := s.imageRepo.Create(dstPath)
 		if imageErr != nil {
+			fmt.Println(3)
 			return -1, imageErr
 		}
 		newChannel.ImageID = imageId
