@@ -5,34 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/channel.css">
-    <title>Channel </title>
+    <title>Channel</title>
 </head>
-<body>
-    <p>{{.Id}}</p>
-    <p>{{.Name}}</p>
-    {{range .Tags}}
-        <h1>{{.}}</h1>
-    {{end}}
-    <h2>Créer un tag</h2>
-    <form action="/create/tag/{{.Id}}" method="post">
-        <label for="tag">tag name</label>
-        <input type="text" name="tag" id="tag" placeholder="tag">
-    </form>
-    <h2>Ajouter un tag</h2>
-    <form action="/add/tag/{{.Id}}" method="post">
-        <label for="tag">tag name</label>
-        <input type="text" name="tag" id="tag" placeholder="tag">
-    </form>
-    <h2>Messages</h2>
-    {{range .Messages}}
-        <h3>{{.Id}}</h3>
-        <h4>{{.Text}}</h4>
-    {{end}}
-    <h2>Fomulaire des messages</h2>
-    <form action="/create/message/{{.Id}}" method="post">
-        <label for="textContent"></label>
-        <input type="text" name="textContent" id="textContent" placeholder="message">
-    </form>
+<body class="chat-area-server">
+
+    <div class="chat-messages-server">
+        <p class="channel-item active">{{.Id}}</p>
+        <p class="channel-item">{{.Name}}</p>
+        {{range .Tags}}
+            <h1 class="channel-category">{{.}}</h1>
+        {{end}}
+
+        <h2 class="chat-header-server">Créer un tag</h2>
+        <form action="/create/tag/{{.Id}}" method="post" class="chat-input-server">
+            <label for="tag" class="message-author-server">tag name</label>
+            <input type="text" name="tag" id="tag" placeholder="tag" class="chat-input-server-input">
+        </form>
+
+        <h2 class="chat-header-server">Ajouter un tag</h2>
+        <form action="/add/tag/{{.Id}}" method="post" class="chat-input-server">
+            <label for="tag" class="message-author-server">tag name</label>
+            <input type="text" name="tag" id="tag" placeholder="tag" class="chat-input-server-input">
+        </form>
+
+        <h2 class="chat-header-server">Messages</h2>
+        {{range .Messages}}
+            <div class="message-item-server">
+                <div class="message-content-server">
+                    <h3 class="message-author-server">{{.Id}}</h3>
+                    <h4 class="message-text-server">{{.Text}}</h4>
+                </div>
+            </div>
+        {{end}}
+
+        <h2 class="chat-header-server">Formulaire des messages</h2>
+        <form action="/create/message/{{.Id}}" method="post" class="chat-input-server">
+            <label for="textContent" class="message-author-server">Message</label>
+            <input type="text" name="textContent" id="textContent" placeholder="message" class="chat-input-server-input">
+        </form>
+    </div>
+
 </body>
 </html>
 {{end}}
