@@ -15,7 +15,7 @@ func InitFriendRepository(db *sql.DB) *FriendRepository {
 }
 
 func (r *FriendRepository) AddFriendRequest(user_id_who_invite int, user_id_who_is_invited int) error {
-	query := "INSERT INTO friend_request (user_id_creator, user_id_invite, created_at) VALUES ('?', '?', '?')"
+	query := "INSERT INTO friend_request (user_id_creator, user_id_invite, created_at) VALUES (?, ?, ?)"
 
 	_, resultErr := r.db.Exec(query, user_id_who_invite, user_id_who_is_invited, time.Now())
 	if resultErr != nil {

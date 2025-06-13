@@ -14,7 +14,7 @@ func InitTagRepository(db *sql.DB) *TagRepository {
 }
 
 func (r *TagRepository) CreateTag(tagName string) (int, error) {
-	query := "INSERT INTO tags (name, created_at) VALUES (?, ?)"
+	query := "INSERT INTO tag (name, created_at) VALUES (?, ?)"
 
 	result, resultErr := r.db.Exec(query, tagName, time.Now())
 	if resultErr != nil {
@@ -29,7 +29,7 @@ func (r *TagRepository) CreateTag(tagName string) (int, error) {
 }
 
 func (r *TagRepository) GetTagIdByName(tagName string) (int, error) {
-	query := "SELECT tag_id FROM tags WHERE name = ?"
+	query := "SELECT tag_id FROM tag WHERE name = ?"
 
 	var tagId int
 	err := r.db.QueryRow(query, tagName).Scan(&tagId)
@@ -40,7 +40,7 @@ func (r *TagRepository) GetTagIdByName(tagName string) (int, error) {
 }
 
 func (r *TagRepository) DeleteTag(tagId int) error {
-	query := "DELETE FROM tags WHERE tag_id = ?"
+	query := "DELETE FROM tag WHERE tag_id = ?"
 
 	_, err := r.db.Exec(query, tagId)
 	if err != nil {
@@ -73,7 +73,7 @@ func (r *TagRepository) RemoveTagFromChannel (channelId int, tagId int) error {
 }
 
 func (r *TagRepository) GetTagsByChannelId(channelId int) ([]string, error) {
-	query := "SELECT tags.name FROM tags INNER JOIN channel_tags ON tags.tag_id = channel_tags.tag_id WHERE channel_tags.channel_id = ?"
+	query := "SELECT tag.name FROM tag INNER JOIN channel_tags ON tag.tag_id = channel_tags.tag_id WHERE channel_tags.channel_id = ?"
 
 	rows, err := r.db.Query(query, channelId)
 	if err != nil {

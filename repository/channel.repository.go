@@ -15,7 +15,7 @@ func InitChannelRepository(db *sql.DB) *ChannelRepository {
 }
 
 func (r *ChannelRepository) CreateChannel(channelInfo entity.Channel) (int, error) {
-	query := "INSERT INTO channels (name, description, created_at, private, image_id, state_id, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
+	query := "INSERT INTO channel (name, description, created_at, private, image_id, state_id, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
 	result, resultErr := r.db.Exec(query, channelInfo.Name, channelInfo.Description, channelInfo.CreatedAt, channelInfo.Private, channelInfo.ImageID, channelInfo.StateID, channelInfo.UserID)
 	if resultErr != nil {
@@ -30,14 +30,12 @@ func (r *ChannelRepository) CreateChannel(channelInfo entity.Channel) (int, erro
 }
 
 func (r *ChannelRepository) GetChannelById(channelId int) (entity.Channel, error) {
-	query := "SELECT channel_id, name, description,	created_at,	private	image_id, state_id,	user_id FROM channels WHERE id = ?"
-
+	query := "SELECT channel_id, name, description,	created_at,	private, image_id, state_id, user_id FROM channel WHERE channel_id  = ?;"
 	var channel entity.Channel
 	err := r.db.QueryRow(query, channelId).Scan(&channel.ChannelID, &channel.Name, &channel.Description, &channel.CreatedAt, &channel.Private, &channel.ImageID, &channel.StateID, &channel.UserID)
 	if err != nil {
 		return entity.Channel{}, err
 	}
-
 	return channel, nil
 }
 
@@ -98,7 +96,7 @@ func (r *ChannelRepository) DeleteChannel(channelId int) error {
 }
 
 func (r *ChannelRepository) VerifyAccess(channelId int, userId int) (bool, error) {
-	query := "SELECT COUNT(*) FROM channels WHERE channel_id = ? AND user_id = ?"
+	query := "SELECT COUNT(*) FROM channel WHERE channel_id = ? AND user_id = ?"
 
 	var count int
 	err := r.db.QueryRow(query, channelId, userId).Scan(&count)
@@ -159,7 +157,7 @@ func (r *ChannelRepository) GetAllChannelInvitations(user_id_invite int) ([]enti
 func (r *ChannelRepository) DeleteChannelInvitation(user_id_creator int, user_id_invite int, channelId int) error {
 	query := "DELETE FROM channel_invitation WHERE user_id_creator = ? AND user_id_invite = ? AND channel_id = ?"
 
-	_, err := r.db.Exec(query,user_id_creator, user_id_invite, channelId)
+	_, err := r.db.Exec(query, user_id_creator, user_id_invite, channelId)
 	if err != nil {
 		return err
 	}

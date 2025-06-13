@@ -116,9 +116,7 @@ func (s *ChannelService) GetChannelById(channelId string, token string) (dto.Cha
 	channel, err := s.channelRepo.GetChannelById(intChannelId)
 	owner, err := s.usersRepo.GetById(strconv.Itoa(channel.UserID))
 	tags, err := s.tagRepo.GetTagsByChannelId(intChannelId)
-
 	channelDto := mapper.ChannelEntityToDTO(channel, mapper.UserEntityToDTO(owner), tags)
-
 	return channelDto, err
 }
 

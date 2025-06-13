@@ -9,12 +9,13 @@ import (
 
 type FriendService struct {
 	friendRepo *repository.FriendRepository
-	usersRepo *repository.UsersRepository
+	usersRepo  *repository.UsersRepository
 }
 
 func InitFriendServices(db *sql.DB) *FriendService {
 	return &FriendService{
 		friendRepo: repository.InitFriendRepository(db),
+		usersRepo:  repository.InitUsersRepository(db),
 	}
 }
 

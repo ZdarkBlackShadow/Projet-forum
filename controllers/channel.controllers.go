@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"projet-forum/models/dto"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/gorilla/mux"
 )
+
 // ChannelControllers handles HTTP requests related to channels.
 type ChannelControllers struct {
 	service  *services.ChannelService
@@ -34,7 +36,8 @@ func InitChannelControllers(service *services.ChannelService, template *template
 // ChannelRouter sets up routing for channel-related endpoints.
 func (c *ChannelControllers) ChannelRouter(r *mux.Router) {
 	r.HandleFunc("/channel/{id}", c.GetChannelById).Methods("GET")
-	r.HandleFunc("/create/channel", c.Create).Methods("POST")
+	r.HandleFunc("/create/channel", c.CreateChannel).Methods("GET")
+	r.HandleFunc("/create/channel/submit", c.Create).Methods("POST")
 	r.HandleFunc("/delete/channel/{id}", c.Delete).Methods("POST")
 	r.HandleFunc("/add/tag/{id}", c.AddTags).Methods("POST")
 	r.HandleFunc("/remove/tag/{id}", c.RemoveTags).Methods("POST")
@@ -65,22 +68,18 @@ func (c *ChannelControllers) GetChannelById(w http.ResponseWriter, r *http.Reque
 
 // Create handles the POST request to create a new channel.
 func (c *ChannelControllers) Create(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseMultipartForm(10 << 50)
-	if err != nil {
-		http.Error(w, "Erreur lors du parsing du formulaire", http.StatusBadRequest)
-		return
-	}
 
 	token, err := r.Cookie("token")
 	if err != nil {
 		http.Error(w, "Erreur lors de la récupération du cookie", http.StatusBadRequest)
 		return
 	}
-	err = r.ParseForm()
+	err = r.ParseMultipartForm(10 << 50)
 	if err != nil {
 		http.Error(w, "Erreur lors du parsing du formulaire", http.StatusBadRequest)
 		return
 	}
+
 	name := r.FormValue("name")
 	description := r.FormValue("description")
 	private := r.FormValue("status") == "private"
@@ -104,6 +103,7 @@ func (c *ChannelControllers) Create(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 
 	channelId, creationErr := c.service.CreateChannel(channelInfo, channelImage, token.Value)
+	fmt.Println(creationErr)
 	if creationErr != nil {
 		http.Error(w, "Erreur lors de la création du channel", http.StatusBadRequest)
 		return
@@ -264,4 +264,12 @@ func (c *ChannelControllers) DeclineInvitation(w http.ResponseWriter, r *http.Re
 	}
 
 	http.Redirect(w, r, "/channel/"+channelId, http.StatusSeeOther)
+}
+
+func (c *ChannelControllers) CreateChannel(w http.ResponseWriter, r *http.Request) {
+	err := c.template.ExecuteTemplate(w, "create-channel", nil)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'exécution du template", http.StatusBadRequest)
+		return
+	}
 }
