@@ -38,13 +38,18 @@ type User struct {
 }
 
 type Message struct {
-	Id        int
-	Text      string
-	Edited    bool
-	Creator   User
-	Image     bool
-	ImageFile Image
-	Reaction  []string
+	Id         int
+	Text       string
+	Edited     bool
+	Creator    User
+	Image      bool
+	ImageFile  Image
+	Reaction   []string
+	NbUpVote   int
+	NbDownVote int
+	UserVote   bool
+	Vote       int
+	UpVotes    []UpDownVote
 }
 
 type Image struct {
@@ -76,4 +81,9 @@ type UserInformation struct {
 	Username string
 	Bio      string
 	Image    string
+}
+
+type UpDownVote struct {
+	UserId int
+	Vote   int
 }

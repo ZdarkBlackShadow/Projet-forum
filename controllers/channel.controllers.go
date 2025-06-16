@@ -59,9 +59,11 @@ func (c *ChannelControllers) GetChannelById(w http.ResponseWriter, r *http.Reque
 
 	channel, err := c.service.GetChannelById(userId, cookie.Value)
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, "Erreur lors de la récupération du channel", http.StatusBadRequest)
 		return
 	}
+	fmt.Println(channel)
 
 	c.template.ExecuteTemplate(w, "channel", channel)
 }

@@ -126,33 +126,40 @@ func (s *MessageServices) DeleteMessage(messageId string, token string) error {
 	return s.messageRepo.DeleteMessage(intMessageId)
 }
 
-func (s *MessageServices) AddUpDownVote(messageId string, token string, voteType string) error {
+func (s *MessageServices) AddUpDownVote(messageId string, token string, voteType string) (entity.Message, error) {
 	userId, jwtErr := utils.VerifyJWT(token)
 	if jwtErr != nil {
-		return jwtErr
+		fmt.Println(jwtErr)
+		fmt.Println(token)
+		return entity.Message{}, jwtErr
 	}
 
 	intVote, convErr := strconv.Atoi(voteType)
 	if convErr != nil {
-		return convErr
+		return entity.Message{}, convErr
 	}
 
 	intUserId, convErr := strconv.Atoi(userId)
 	if convErr != nil {
-		return convErr
+		return entity.Message{}, convErr
 	}
 
 	intMessageId, convErr := strconv.Atoi(messageId)
 	if convErr != nil {
-		return convErr
+		return entity.Message{}, convErr
 	}
 
 	message, reqErr := s.GetMessageById(intMessageId)
 	if reqErr != nil {
-		return reqErr
+		fmt.Println(reqErr)
+		return entity.Message{}, reqErr
 	}
 
-	return s.messageRepo.AddUpDownVote(message.MessageTextID, intUserId, intVote)
+	err := s.messageRepo.AddUpDownVote(message.MessageTextID, intUserId, intVote)
+	if err != nil {
+		return entity.Message{}, err
+	}
+	return message, nil
 }
 
 func (s *MessageServices) UpdateUpDownVote(messageId string, token string, newVote string) error {
@@ -176,7 +183,7 @@ func (s *MessageServices) UpdateUpDownVote(messageId string, token string, newVo
 		return convErr
 	}
 
-	message, reqErr := s.GetMessageById(intMessageId)
+	message, reqErr := s.messageRepo.GetMessageByID(intMessageId)
 	if reqErr != nil {
 		return reqErr
 	}

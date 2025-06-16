@@ -31,8 +31,38 @@
         <h2 class="chat-header-server">Messages</h2>
         {{range .Messages}}
             <div class="message-item-server">
+                <div>
+                    {{if eq .UserVote false}}
+                        <form action="/create/updownvote" method="post" style="display: inline;">
+                            <input type="hidden" name="messageId" value="{{.Id}}">
+                            <input type="hidden" name="channelId" value="{{.Id}}">
+                            <input type="hidden" name="vote" value="1">
+                            <button type="submit">{{.NbUpVote}}⬆️</button>
+                        </form>
+                        <form action="/create/updownvote" method="post" style="display: inline;">
+                            <input type="hidden" name="messageId" value="{{.Id}}">
+                            <input type="hidden" name="channelId" value="{{.Id}}">
+                            <input type="hidden" name="vote" value="0">
+                            <button type="submit">{{.NbDownVote}}⬇️</button>
+                        </form>
+                    {{else}}
+                        <form action="/update/updownvote" method="post" style="display: inline;">
+                            <input type="hidden" name="messageId" value="{{.Id}}">
+                            <input type="hidden" name="channelId" value="{{.Id}}">
+                            <input type="hidden" name="vote" value="1">
+                            <button type="submit">⬆️</button>
+                        </form>
+                        <span>{{.NbDownVote}}</span>
+                        <form action="/update/updownvote" method="post" style="display: inline;">
+                            <input type="hidden" name="messageId" value="{{.Id}}">
+                            <input type="hidden" name="channelId" value="{{.Id}}">
+                            <input type="hidden" name="vote" value="0">
+                            <button type="submit">⬇️</button>
+                        </form>
+                    {{end}}
+                </div>
                 <div class="message-content-server">
-                    <h3 class="message-author-server">{{.Id}}</h3>
+                    <h3 class="message-author-server">{{.Creator.Name}}</h3>
                     <h4 class="message-text-server">{{.Text}}</h4>
                 </div>
             </div>

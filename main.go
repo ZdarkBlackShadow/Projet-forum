@@ -61,8 +61,8 @@ func main() {
 	staticFileHandler := http.StripPrefix("/static/", http.FileServer(staticFileDirectory))
 	router.PathPrefix("/static/").Handler(staticFileHandler).Methods("GET")
 
-	log.Println("http://localhost:8080/")
-	serveErr := http.ListenAndServe("localhost:8080", router)
+	log.Println("http://localhost:8000/")
+	serveErr := http.ListenAndServe("localhost:8000", router)
 	if serveErr != nil {
 		log.Fatal(serveErr)
 	}

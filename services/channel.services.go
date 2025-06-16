@@ -128,14 +128,20 @@ func (s *ChannelService) GetChannelById(channelId string, token string) (dto.Cha
 	tags, err := s.tagRepo.GetTagsByChannelId(intChannelId)
 	messages, err := s.messageRepo.GetMessagesByChannelID(intChannelId)
 	var creatorList []dto.User
+	var upDownVoteList [][]dto.UpDownVote
 	for _, message := range messages {
 		creator, err := s.usersRepo.GetById(strconv.Itoa(message.UserID))
 		if err != nil {
 			return dto.Channel{}, err
 		}
+		upDownVoteMessage, err := s.updownRepo.GetAllUpDownVoteFromMessageId(message.MessageTextID)
+		if err != nil {
+			return dto.Channel{}, err
+		}
+		upDownVoteList = append(upDownVoteList, mapper.ListUpDownVoteEntityToDTO(upDownVoteMessage))
 		creatorList = append(creatorList, mapper.UserEntityToDTO(creator))
 	}
-	dtoMessages := mapper.ListOfMessagesEntityToDTO(messages, creatorList)
+	dtoMessages := mapper.ListOfMessagesEntityToDTO(messages, creatorList, upDownVoteList)
 	channelDto := mapper.ChannelEntityToDTO(channel, mapper.UserEntityToDTO(owner), tags, dtoMessages)
 	return channelDto, err
 }

@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"net/http"
 	"projet-forum/services"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -122,15 +123,15 @@ func (c *MessageControllers) AddUpDownVote(w http.ResponseWriter, r *http.Reques
 	}
 
 	messageId := r.FormValue("messageId")
-	channelId := r.FormValue("channelId")
 	vote := r.FormValue("vote")
 
-	err = c.service.AddUpDownVote(messageId, vote, cookie.Value)
+	message, err := c.service.AddUpDownVote(messageId, cookie.Value, vote)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/channel/"+channelId, http.StatusSeeOther)
+
+	http.Redirect(w, r, "/channel/"+strconv.Itoa(message.Channel_id), http.StatusSeeOther)
 }
 
 // UpdateUpDownVote modifies an existing vote (upvote or downvote) on a message.

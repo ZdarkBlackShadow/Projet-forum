@@ -24,20 +24,34 @@ func ChannelEntityToDTO(e entity.Channel, owner dto.User, tags []string, message
 		IsPrivate:   e.Private,
 		Owner:       owner,
 		Tags:        tags,
-		Messages: messages,
+		Messages:    messages,
 	}
 }
 
 // MessageEntityToDTO convertit une entité Message en DTO Message
-func MessageEntityToDTO(e entity.Message, creator dto.User, image dto.Image, reactions []string) dto.Message {
+func MessageEntityToDTO(e entity.Message, creator dto.User, image dto.Image, reactions []string, upDownVotes []dto.UpDownVote, uservote bool, vote int) dto.Message {
+	nbUpVote := 0
+	nbDownVote := 0
+	for _, vote := range upDownVotes {
+		if vote.Vote == 1 {
+			nbUpVote++
+		} else if vote.Vote == 0 {
+			nbDownVote++
+		}
+	}
 	return dto.Message{
-		Id:        e.MessageTextID,
-		Text:      e.Text,
-		Edited:    e.Edited,
-		Creator:   creator,
-		Image:     e.Image,
-		ImageFile: image,
-		Reaction:  reactions,
+		Id:         e.MessageTextID,
+		Text:       e.Text,
+		Edited:     e.Edited,
+		Creator:    creator,
+		Image:      e.Image,
+		ImageFile:  image,
+		Reaction:   reactions,
+		UpVotes:    upDownVotes,
+		NbUpVote:   nbUpVote,
+		NbDownVote: nbDownVote,
+		UserVote:   uservote,
+		Vote:       vote,
 	}
 }
 
@@ -69,10 +83,32 @@ func ChannelInvitationEntityToDTO(e entity.ChannelInvitation) dto.ChannelInvitat
 	}
 }
 
-func ListOfMessagesEntityToDTO(messages []entity.Message, creators []dto.User) []dto.Message {
+func ListOfMessagesEntityToDTO(messages []entity.Message, creators []dto.User, updownList [][]dto.UpDownVote) []dto.Message {
 	var messagesDTO []dto.Message
+	uservote := false
+	vote := 0
 	for index, message := range messages {
-		messagesDTO = append(messagesDTO, MessageEntityToDTO(message, creators[index], dto.Image{}, []string{}))
+		for _, updown := range updownList[index] {
+			if updown.UserId == creators[index].Id {
+				uservote = true
+				vote = updown.Vote
+			}
+		}
+		messagesDTO = append(messagesDTO, MessageEntityToDTO(message, creators[index], dto.Image{}, []string{}, updownList[index], uservote, vote))
 	}
 	return messagesDTO
+}
+
+func ListUpDownVoteEntityToDTO(votes []entity.UpDown) []dto.UpDownVote {
+	var votesDTO []dto.UpDownVote
+	for _, vote := range votes {
+		votesDTO = append(
+			votesDTO,
+			dto.UpDownVote{
+				UserId: vote.UserID,
+				Vote:   vote.UpDownVoteID,
+			},
+		)
+	}
+	return votesDTO
 }
